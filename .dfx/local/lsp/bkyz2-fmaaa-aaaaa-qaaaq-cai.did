@@ -1,0 +1,10 @@
+type Student = 
+ record {
+   course: text;
+   name: text;
+   section: text;
+ };
+service : {
+  getStudents: () -> (vec Student) query;
+  register: (Student) -> ();
+}
