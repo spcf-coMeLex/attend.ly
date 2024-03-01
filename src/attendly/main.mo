@@ -2,25 +2,34 @@ import HashMap "mo:base/HashMap";
 import Principal "mo:base/Principal";
 import Error "mo:base/Error";
 import Iter "mo:base/Iter";
+import Map "mo:base/Map";
+import { phash } "mo:map/Map";
+import Types "types";
 
 actor Attendly {
-    type Student = {
-        name: Text;
-        section: Text;
-        course: Text;
-    };
 
-    let students = HashMap.HashMap<Principal, Student>(1, Principal.equal, Principal.hash);
+    type Result<Ok, Err> = Types.Result<Ok, Err>;
+    type HashMap<K, V> = Types.HashMap<K, V>;
+    type Student = Types.Student;
+    type Employee = Types.Employee;
 
-    public shared ({caller}) func register(studentInfo: Student): async () {
-        if (Principal.isAnonymous(caller)) {
-            // throw Error.reject("Can't register anonymous user");
-            return;
-        };
-        students.put(caller, studentInfo);
+
+
+    stable let students = Map.new<Principal, Student>();
+    stable let employee = Map.new<Principal, Employee>();
+
+    public shared ({caller}) func register(studentInfo: Student): async Result<(), Text> {
+        switch(Principal.isAnonymous(caller)) {
+            case(true) { 
+                return #err("Registration failed. Anonymous identity detected.");
+             };
+            case(false) {
+                return #ok();
+                };
+            };
     };
 
     public shared query func getStudents(): async [Student] {
-        Iter.toArray(students.vals());
+        Iter.toArray(Map.vals<Principal, Student>(students));
     }
 }
