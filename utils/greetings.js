@@ -2,11 +2,11 @@ const greetings = () => {
   const date = new Date();
   const hours = date.getHours();
 
-  let greeting = "Good morning";
+  let greeting;
   if (hours < 12) {
-    greeting = "Good afternoon";
+    greeting = "Good morning";
   } else if (hours < 18) {
-    greeting = "Good evening";
+    greeting = "Good afternoon";
   } else {
     greeting = "Good night";
   }
