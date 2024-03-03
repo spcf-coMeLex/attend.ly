@@ -4,7 +4,7 @@ import { Colors, DateTimePicker, Picker } from "react-native-ui-lib";
 import { sizes } from "../assets/styles/globalStyles";
 import TextInput from "../components/TextInput";
 
-const renderInputItem = ({ item, data, setData }) => {
+const renderInputItem = ({ key, item, data, setData, value }) => {
   // if (item.isViewing) {
   //   const { placeholder, ...rest } = item;
   //   item = rest;
@@ -13,11 +13,19 @@ const renderInputItem = ({ item, data, setData }) => {
   if (item.isDate) {
     return (
       <DateTimePicker
+        key={key}
         dialogProps={{
           containerStyle: {
             paddingBottom: sizes.xxlarge,
             backgroundColor: Colors.$backgroundDefault,
           },
+        }}
+        onChange={(text) => {
+          if (!item.state) {
+            setData(text);
+            return;
+          }
+          setData({ [item.state]: text });
         }}
         editable={!item.isViewing}
         renderInput={(props) => (
@@ -35,12 +43,20 @@ const renderInputItem = ({ item, data, setData }) => {
   if (item.isDropdown) {
     return (
       <Picker
-        value={data[item.state]}
+        key={key}
+        value={(data && data[item.state]) || value || ""}
         placeholder={item.placeholder}
         items={item.dropdownData}
-        onChange={(text) => setData({ [item.state]: text })}
+        onChange={(text) => {
+          if (!item.state) {
+            setData(text);
+            return;
+          }
+          setData({ [item.state]: text });
+        }}
         useWheelPicker
         topBarProps={{
+          cancelLabel: "Cancel",
           containerStyle: { padding: sizes.large },
         }}
         useSafeArea
@@ -59,10 +75,17 @@ const renderInputItem = ({ item, data, setData }) => {
 
   return (
     <TextInput
+      key={key}
       label={item.label}
-      value={data[item.state]}
+      value={(data && data[item.state]) || value || ""}
       placeholder={item.placeholder}
-      onChangeText={(text) => setData({ [item.state]: text })}
+      onChangeText={(text) => {
+        if (!item.state) {
+          setData(text);
+          return;
+        }
+        setData({ [item.state]: text });
+      }}
       arePasswordsVisible={item.arePasswordsVisible}
       onTogglePasswordsVisibility={item.togglePasswordsVisibility}
       {...item}
