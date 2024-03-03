@@ -5,7 +5,8 @@ import React, {
   useMemo,
   useReducer,
 } from "react";
-import { FlatList, SafeAreaView, View } from "react-native";
+import { ScrollView, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button } from "react-native-ui-lib";
 import { Item } from "react-navigation-header-buttons";
 
@@ -25,16 +26,15 @@ const Profile = ({ navigation }) => {
     initialState,
   );
   const logout = useAuthStore((state) => state.logout);
+  const insets = useSafeAreaInsets();
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <Item
           title="Log out"
-          color={colors.tertiary}
-          // renderButton={() => (
-          //   <Ionicons name="create" size={25} color={colors.primary} />
-          // )}'
+          color={colors.primary}
+          buttonStyle={textStyles.body}
           onPress={logout}
         />
       ),
@@ -42,11 +42,12 @@ const Profile = ({ navigation }) => {
   }, [navigation]);
 
   const renderItem = useCallback(
-    ({ item }) => renderInputItem({ item, data: profileData, setData }),
+    ({ item }) =>
+      renderInputItem({ key: item.state, item, data: profileData, setData }),
     [profileData],
   );
 
-  const userFields = useMemo(() => {
+  const userDataFields = useMemo(() => {
     return FORM_FIELDS.map((item) => ({
       ...item,
       isViewing: true,
@@ -54,20 +55,20 @@ const Profile = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView style={globalStyles.flexFull}>
+    <View style={[globalStyles.flexFull, { paddingBottom: insets.bottom }]}>
       <View style={[globalStyles.flexFull, { padding: sizes.large }]}>
         <StatusBar style="dark" />
 
         <View style={[globalStyles.flexFull, globalStyles.spaceBetween]}>
-          <FlatList
-            data={userFields}
-            keyExtractor={(item) => item.state}
+          <ScrollView
             contentContainerStyle={{
               rowGap: sizes.xxlarge,
-              padding: sizes.large,
+              padding: sizes.xlarge,
+              paddingBottom: sizes.xxlarge,
             }}
-            renderItem={renderItem}
-          />
+          >
+            {userDataFields.map((item) => renderItem({ item }))}
+          </ScrollView>
 
           <Button
             label="Update Profile"
@@ -80,7 +81,7 @@ const Profile = ({ navigation }) => {
           />
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

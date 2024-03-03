@@ -1,10 +1,10 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React, { useCallback, useMemo, useReducer } from "react";
 import {
-  FlatList,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
+  ScrollView,
   Text,
   View,
 } from "react-native";
@@ -14,7 +14,6 @@ import { Button } from "react-native-ui-lib";
 import globalStyles, { colors, sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
 import FORM_FIELDS from "../consts/formData";
-import ROLES from "../consts/roles";
 import STATES from "../consts/states";
 import useAuthStore from "../stores/useAuthStore";
 import getInitialState from "../utils/getInitialState";
@@ -45,7 +44,12 @@ const RegisterTeacher = ({ navigation, route }) => {
           togglePasswordsVisibility,
         };
       }
-      return renderInputItem({ item, data: formData, setData });
+      return renderInputItem({
+        key: item.state,
+        item,
+        data: formData,
+        setData,
+      });
     },
     [arePasswordsVisible, formData],
   );
@@ -82,16 +86,15 @@ const RegisterTeacher = ({ navigation, route }) => {
           </View>
 
           <View style={[globalStyles.flexFull, globalStyles.spaceBetween]}>
-            <FlatList
-              data={signUpFields}
-              keyExtractor={(item) => item.state}
+            <ScrollView
               contentContainerStyle={{
                 rowGap: sizes.xxlarge,
-                padding: sizes.large,
+                padding: sizes.xlarge,
+                paddingBottom: sizes.xxlarge,
               }}
-              contentInset={{ bottom: sizes.xxlarge }}
-              renderItem={renderItem}
-            />
+            >
+              {signUpFields.map((item) => renderItem({ item }))}
+            </ScrollView>
 
             <Button
               label="Register"
@@ -101,7 +104,7 @@ const RegisterTeacher = ({ navigation, route }) => {
                 marginVertical: sizes.medium,
               }}
               enableShadow
-              onPress={() => register(ROLES.TEACHER)}
+              onPress={() => register(role)}
             />
           </View>
         </View>

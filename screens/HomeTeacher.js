@@ -1,7 +1,8 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useScrollToTop } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useRef } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -23,26 +24,11 @@ import { StateTypes } from "react-native-ui-lib/src/components/timeline/types";
 
 import globalStyles, { colors, sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
+import chartConfig from "../consts/chartConfig";
 import Routes from "../navigation/Routes";
 import greetings from "../utils/greetings";
 
 const screenWidth = Dimensions.get("window").width;
-
-const chartConfig = {
-  // Gives white background
-  backgroundGradientFrom: "transparent",
-  backgroundGradientFromOpacity: 0,
-  backgroundGradientToOpacity: 0,
-
-  // Label and chart colors
-  color: (opacity = 1) => `rgba(0, 83, 156, ${opacity})`,
-
-  formatYLabel: (label) => Math.round(label),
-  propsForLabels: {
-    fontColor: "red",
-  },
-  barPercentage: 0.8,
-};
 
 const activities = [
   {
@@ -62,14 +48,23 @@ const activities = [
     isAlert: true,
   },
   {
-    message: "Mel Mathew went to class late",
+    message: "Mel Mathew went to class late.",
     date: "Feb 19",
     time: "9:20 am",
     isAlert: true,
   },
+  {
+    message: "Mel Mathew went to class.",
+    date: "Feb 20",
+    time: "9:14 am",
+  },
 ];
 
 const HomeTeacher = ({ navigation }) => {
+  const scrollViewRef = useRef(null);
+
+  useScrollToTop(scrollViewRef);
+
   return (
     <SafeAreaView style={[globalStyles.flexFull, globalStyles.androidPadding]}>
       <StatusBar style="light" />
@@ -104,7 +99,10 @@ const HomeTeacher = ({ navigation }) => {
           <View
             style={[
               globalStyles.rowCenter,
-              { paddingRight: sizes.small, columnGap: sizes.medium },
+              {
+                paddingRight: sizes.small,
+                columnGap: sizes.medium,
+              },
             ]}
           >
             <TouchableOpacity
@@ -127,7 +125,7 @@ const HomeTeacher = ({ navigation }) => {
 
         <ScrollView
           contentContainerStyle={{
-            rowGap: sizes.xxlarge,
+            rowGap: sizes.large,
             paddingBottom: sizes.xlarge,
           }}
           showsVerticalScrollIndicator={false}
@@ -148,38 +146,42 @@ const HomeTeacher = ({ navigation }) => {
             >
               <Text style={textStyles.subHeading}>Today's Statistics</Text>
 
-              <View
-                style={[
-                  globalStyles.rowCenter,
-                  { columnGap: sizes.xxlarge, padding: sizes.small },
-                ]}
-              >
-                <ProgressChart
-                  data={{
-                    data: [0.8],
-                  }}
-                  hideLegend
-                  radius={60}
-                  strokeWidth={30}
-                  height={180}
-                  width={175}
-                  chartConfig={chartConfig}
-                />
+              <View style={[globalStyles.center, { rowGap: sizes.large }]}>
+                <View
+                  style={[
+                    globalStyles.rowCenter,
+                    { columnGap: sizes.xxlarge, padding: sizes.small },
+                  ]}
+                >
+                  <ProgressChart
+                    data={{
+                      data: [0.8],
+                    }}
+                    hideLegend
+                    radius={60}
+                    strokeWidth={30}
+                    width={160}
+                    height={160}
+                    chartConfig={chartConfig}
+                  />
 
-                <View style={{ rowGap: sizes.medium }}>
-                  <View>
-                    <Text style={[textStyles.subTitle, { color: "gray" }]}>
-                      Present
-                    </Text>
-                    <Text style={textStyles.heading}>30</Text>
-                  </View>
-                  <View>
-                    <Text style={[textStyles.subTitle, { color: "gray" }]}>
-                      Absent
-                    </Text>
-                    <Text style={textStyles.heading}>5</Text>
+                  <View style={{ rowGap: sizes.medium }}>
+                    <View>
+                      <Text style={[textStyles.subTitle, { color: "gray" }]}>
+                        Present
+                      </Text>
+                      <Text style={textStyles.heading}>30</Text>
+                    </View>
+                    <View>
+                      <Text style={[textStyles.subTitle, { color: "gray" }]}>
+                        Absent
+                      </Text>
+                      <Text style={textStyles.heading}>5</Text>
+                    </View>
                   </View>
                 </View>
+
+                <Text style={textStyles.caption}>Current Subject: PLL</Text>
               </View>
             </Card>
 
@@ -231,7 +233,6 @@ const HomeTeacher = ({ navigation }) => {
             {activities.map((activity, index) => {
               const isFirst = index === 0;
               const isLast = index === activities.length - 1;
-              const lastActivity = index - 1 > 0 && activities[index - 1];
 
               return (
                 <Timeline
@@ -239,7 +240,7 @@ const HomeTeacher = ({ navigation }) => {
                   {...(!isFirst && {
                     topLine: {
                       type: TimelineLineTypes.DASHED,
-                      state: lastActivity.isAlert
+                      state: activity.isAlert
                         ? StateTypes.ERROR
                         : StateTypes.SUCCESS,
                     },
@@ -263,6 +264,7 @@ const HomeTeacher = ({ navigation }) => {
                       padding: sizes.large,
                       rowGap: sizes.small,
                       marginLeft: sizes.medium,
+                      width: "100%",
                     }}
                   >
                     <Text style={textStyles.body}>{activity.message}</Text>

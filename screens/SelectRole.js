@@ -1,18 +1,14 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useCallback, useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
-import { BorderlessButton } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { Button, Card } from "react-native-ui-lib";
 
 import globalStyles, { colors, sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
+import ROLES from "../consts/roles";
 import Routes from "../navigation/Routes";
 import useAuthStore from "../stores/useAuthStore";
-
-const ROLES = {
-  STUDENT: "student",
-  TEACHER: "teacher",
-};
 
 const roleOptions = [
   {
@@ -36,6 +32,7 @@ const SelectRole = ({ navigation }) => {
     switch (selected) {
       case ROLES.STUDENT:
         navigation.navigate(Routes.SCAN_CODE);
+        // navigation.navigate(Routes.SIGN_UP, { role: ROLES.STUDENT });
         break;
       case ROLES.TEACHER:
         navigation.navigate(Routes.SIGN_UP, { role: ROLES.TEACHER });
@@ -48,17 +45,18 @@ const SelectRole = ({ navigation }) => {
       <StatusBar style="auto" animated />
 
       <View style={[globalStyles.flexFull, { padding: sizes.large }]}>
-        <View
-          style={{
-            marginTop: sizes.medium,
-            marginBottom: sizes.xlarge,
-          }}
-        >
-          <BorderlessButton onPress={logout} style={{ margin: sizes.medium }}>
+        <View style={[globalStyles.row, { justifyContent: "flex-end" }]}>
+          <TouchableOpacity
+            onPress={logout}
+            style={{
+              margin: sizes.medium,
+              padding: sizes.small,
+            }}
+          >
             <Text style={[textStyles.link, { textAlign: "right" }]}>
               Log out
             </Text>
-          </BorderlessButton>
+          </TouchableOpacity>
         </View>
 
         <View style={globalStyles.flexCenter}>
