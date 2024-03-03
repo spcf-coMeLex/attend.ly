@@ -89,9 +89,18 @@ const useAuthStore = create((set, get) => ({
 
     // Get public key
     const publicDerKey = toHex(get().baseKey.getPublicKey().toDer());
+
+    // Replace with own ii integration canister
     const url = new URL(
-      "http://127.0.0.1:4943/?canisterId=bd3sg-teaaa-aaaaa-qaaba-cai",
-    ); // Replace with own canister url
+      "http://127.0.0.1:4943/?canisterId=" +
+        process.env.EXPO_PUBLIC_CANISTER_ID_II_INTEGRATION,
+    );
+
+    // Set internet identity canister
+    url.searchParams.set(
+      "ii_canisterId",
+      process.env.EXPO_PUBLIC_CANISTER_ID_INTERNET_IDENTITY,
+    );
 
     // Set redirect uri
     const prefix = Linking.createURL("/");
