@@ -8,22 +8,36 @@ module {
     public type Result<Ok, Err> = Result.Result<Ok, Err>;
     public type HashMap<Ok, Err> = HashMap.HashMap<Ok, Err>;
 
-    public type Student = {
-        uId: Text;
+    // public type Student = {
+    //     uId: Text;
+    // };
+
+    // public type Employee = {
+    //     uId: Text;
+    // };
+
+    public type StatusType = {
+        #In;
+        #Out;
     };
 
-    public type Employee = {
-        uId: Text;
+    public type Day = {
+        #Monday;
+        #Tuesday;
+        #Wednesday;
+        #Thursday;
+        #Friday;
+        #Saturday;
+        #Sunday;
     };
 
     public type Attendance = {
-        uId: Text;
         studentId: Principal;
         classId: Text;
         subjectId: Text;
-        day: Text;
+        day: Day;
         time: Text;
-        attendanceType: {#in; #out;} 
+        attendanceType: StatusType;
     };
 
 
