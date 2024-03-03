@@ -17,7 +17,7 @@ async function main() {
   const loginButton = document.querySelector("ii-login-button");
   loginButton.addEventListener("ready", () => {
     try {
-      const { redirectUri, identity } = parseParams();
+      const { iiCanisterId, redirectUri, identity } = parseParams();
 
       loginButton.configure({
         createOptions: {
@@ -27,7 +27,7 @@ async function main() {
           identityProvider:
             process.env.DFX_NETWORK === "ic"
               ? "https://identity.ic0.app"
-              : "http://127.0.0.1:4943/?canisterId=rdmx6-jaaaa-aaaaa-aaadq-cai",
+              : `http://127.0.0.1:4943/?canisterId=${iiCanisterId}`,
           onSuccess: () => {
             const loginButton = document.querySelector("ii-login-button");
             const delegationIdentity = loginButton.identity;
@@ -78,18 +78,23 @@ class IncompleteEd25519KeyIdentity extends SignIdentity {
  */
 function parseParams() {
   const url = new URL(window.location.href);
+  const iiCanisterId = url.searchParams.get("ii_canisterId");
   const redirectUri = decodeURIComponent(url.searchParams.get("redirect_uri"));
   const pubKey = url.searchParams.get("pubkey");
 
-  if (!redirectUri || !pubKey) {
-    renderError(new Error("Missing redirect_uri or pubkey in query string"));
-    throw new Error("Missing redirect_uri or pubkey in query string");
+  if (
+    !redirectUri ||
+    !pubKey ||
+    (process.env.DFX_NETWORK !== "ic" && !iiCanisterId) // if not on ic, we need the ii canister id
+  ) {
+    renderError(new Error("Missing params in query string"));
+    throw new Error("Missing params in query string");
   }
   const identity = new IncompleteEd25519KeyIdentity(
     Ed25519PublicKey.fromDer(fromHex(pubKey)),
   );
 
-  return { redirectUri, identity };
+  return { iiCanisterId, redirectUri, identity };
 }
 
 window.addEventListener("DOMContentLoaded", () => {
