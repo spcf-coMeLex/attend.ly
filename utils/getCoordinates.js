@@ -14,7 +14,11 @@ const getCoordinates = async (place) => {
   const result = data[0]; // Assuming the first result is the correct one
   const { lat: latitude, lon: longitude } = result; // Get the latitude and longitude from the result
 
-  return { longitude, latitude };
+  // Convert the results to a number
+  return {
+    longitude: parseFloat(longitude),
+    latitude: parseFloat(latitude),
+  };
 };
 
 export default getCoordinates;
