@@ -23,7 +23,6 @@ import { Item } from "react-navigation-header-buttons";
 import globalStyles, { colors, sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
 import { STATUS, STATUS_COLORS } from "../consts/attendanceStatus";
-import { useQRCodeContext } from "../contexts/QRCodeContext";
 import Routes from "../navigation/Routes";
 
 const students = [
@@ -53,18 +52,14 @@ const students = [
   },
 ];
 
-const StudentList = ({ navigation }) => {
+const StudentList = ({ navigation, route }) => {
   const [isQrLoading, setIsQRLoading] = useState(false);
 
-  const { section, subject } = useQRCodeContext();
+  const { sectionCode, subjectCode } = route.params;
+  const qrValue = JSON.stringify({ sectionCode, subjectCode });
 
   const qrCodeRef = useRef(null);
   const bottomSheetModalRef = useRef(null);
-
-  const qrValue = JSON.stringify({
-    section,
-    subject,
-  });
 
   const handlePresentModal = useCallback(() => {
     bottomSheetModalRef.current?.present();

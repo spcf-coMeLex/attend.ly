@@ -7,7 +7,6 @@ import { Button, Card } from "react-native-ui-lib";
 
 import globalStyles, { colors, sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
-import { useQRCodeContext } from "../contexts/QRCodeContext";
 import Routes from "../navigation/Routes";
 
 const subjects = [
@@ -48,16 +47,15 @@ const subjects = [
   },
 ];
 
-const SubjectList = ({ navigation }) => {
-  const { setSubject } = useQRCodeContext();
+const SubjectList = ({ navigation, route }) => {
+  const { sectionCode } = route.params;
 
   const renderItem = ({ item }) => (
     <Card
       onPress={() => {
-        setSubject(item.code);
-
         navigation.navigate(Routes.STUDENT_LIST, {
-          subjectName: item.code,
+          subjectCode: item.code,
+          sectionCode,
         });
       }}
       style={{
