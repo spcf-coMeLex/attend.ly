@@ -3,9 +3,12 @@ const STATES = {
   MIDDLE_NAME: "middleName",
   LAST_NAME: "lastName",
   GENDER: "gender",
-  BIRTHDAY: "birthday",
+  BIRTHDAY: "birthDate",
   ADDRESS: "address",
   PARENTS_EMAIL: "parentsEmail",
+  PROGRAM: "programCode",
+  BRANCH: "branchName",
+  DEPARTMENT: "departmentCode",
   PASSWORD: "password",
   CONFIRM_PASSWORD: "confirmPassword",
 };
