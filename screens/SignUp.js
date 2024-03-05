@@ -2,6 +2,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useMutation } from "@tanstack/react-query";
 import React, { useCallback, useMemo, useReducer, useState } from "react";
 import {
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -15,8 +16,10 @@ import { Button } from "react-native-ui-lib";
 import globalStyles, { colors, sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
 import FORM_FIELDS from "../consts/formData";
+import ROLES from "../consts/roles";
 import STATES from "../consts/states";
-import { createEmployee } from "../services/apiService";
+import { useQRCodeContext } from "../contexts/QRCodeContext";
+import { createEmployee, createStudent } from "../services/apiService";
 import useAuthStore from "../stores/useAuthStore";
 import getInitialState from "../utils/getInitialState";
 import renderInputItem from "../utils/renderInputItem";
@@ -37,9 +40,10 @@ const RegisterTeacher = ({ navigation, route }) => {
   const { role } = route.params;
 
   const setAsRegistered = useAuthStore((state) => state.setAsRegistered);
+  const { qrValue } = useQRCodeContext();
 
   const registerMutation = useMutation({
-    mutationFn: createEmployee,
+    mutationFn: role === ROLES.TEACHER ? createEmployee : createStudent,
     onSuccess: () => setAsRegistered(role),
     onError: (data) => {
       const {
@@ -48,17 +52,18 @@ const RegisterTeacher = ({ navigation, route }) => {
         },
       } = data;
 
-      console.log(data.response);
       console.log("Errors", errors);
+      console.log(data.response);
       setErrors(errors);
     },
   });
 
   const handleRegister = useCallback(() => {
-    if (!registerMutation.isPending) {
-      registerMutation.mutate({ role, ...formData });
-    }
-  }, [formData, registerMutation.isPending]);
+    // if (!registerMutation.isPending) {
+    //   registerMutation.mutate({ role, ...qrValue, ...formData });
+    // }
+    setAsRegistered(role);
+  }, [formData, registerMutation.isPending, qrValue]);
 
   const renderItem = useCallback(
     ({ item }) => {
@@ -131,15 +136,18 @@ const RegisterTeacher = ({ navigation, route }) => {
             </ScrollView>
 
             <Button
-              label="Register"
+              label={registerMutation.isPending ? " " : "Register"}
               labelStyle={textStyles.subTitle}
               style={{
                 marginHorizontal: sizes.xlarge,
                 marginVertical: sizes.medium,
               }}
               enableShadow
+              disabled={registerMutation.isPending}
               onPress={handleRegister}
-            />
+            >
+              {registerMutation.isPending && <ActivityIndicator />}
+            </Button>
           </View>
         </View>
       </KeyboardAvoidingView>
