@@ -18,6 +18,13 @@
         "node_compatibility": true
       }
     },
+    "attendly_landing": {
+      "frontend": {
+        "entrypoint": "src/index.html"
+      },
+      "source": ["src/attendly_landing"],
+      "type": "assets"
+    },
     "ii_integration": {
       "type": "assets",
       "source": ["src/ii_integration/assets", "src/ii_integration/dist"]
@@ -27,6 +34,12 @@
     "build": {
       "args": "",
       "packtool": ""
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "192.168.1.105:4349",
+      "type": "ephemeral"
     }
   },
   "output_env_file": ".env",
