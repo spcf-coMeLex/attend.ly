@@ -39,7 +39,7 @@ const textStyles = StyleSheet.create({
     fontSize: 80,
   },
   iconRow: {
-    fontSize: 50,
+    fontSize: 40,
     color: "gray",
     fontFamily: "Lexend-Regular",
   },
