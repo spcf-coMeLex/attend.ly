@@ -65,6 +65,10 @@ const TextInput = (props) => {
       autoCapitalize={props.isEmail ? "none" : "words"}
       secureTextEntry={props.isPassword && !props.arePasswordsVisible}
       trailingAccessory={!props.isViewing && getTrailingAccessory()}
+      validationMessageStyle={{
+        paddingVertical: sizes.medium,
+        ...textStyles.body,
+      }}
       {...props}
     />
   );
