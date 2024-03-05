@@ -3,13 +3,13 @@ import { createContext, useContext, useState } from "react";
 const QRCodeContext = createContext();
 
 export const QRCodeProvider = ({ children }) => {
-  const [section, setSection] = useState("");
-  const [subject, setSubject] = useState("");
+  const [qrValue, setQrValue] = useState({
+    sectionCode: "CCIS4A",
+    subjectCode: "PROG1L",
+  });
 
   return (
-    <QRCodeContext.Provider
-      value={{ section, setSection, subject, setSubject }}
-    >
+    <QRCodeContext.Provider value={{ qrValue, setQrValue }}>
       {children}
     </QRCodeContext.Provider>
   );
