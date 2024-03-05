@@ -49,7 +49,7 @@ const qrValue = JSON.stringify({
 });
 
 const HomeStudent = ({ navigation }) => {
-  const [schoolCoordinates, setSchoolCoordinates] = useState({});
+  const [schoolCoordinates, setSchoolCoordinates] = useState(null);
   const [isLoadingCoordinates, setIsLoadingCoordinates] = useState(true);
 
   const time = useTime();
@@ -193,6 +193,7 @@ const HomeStudent = ({ navigation }) => {
                 {format(time, "h:mm a")}
               </Text>
               <Text style={textStyles.caption}>Current Subject: PLL</Text>
+              <Text style={textStyles.caption}>Upcoming Subject: DMATH</Text>
             </View>
           </Card>
 
@@ -313,9 +314,13 @@ const HomeStudent = ({ navigation }) => {
               showsUserLocation
               // followsUserLocation
               region={schoolCoordinates}
-              style={{ width: "100%", height: 200, borderRadius: sizes.medium }}
+              style={{
+                width: "100%",
+                height: 200,
+                borderRadius: sizes.medium,
+              }}
             >
-              <Marker coordinate={schoolCoordinates} />
+              {schoolCoordinates && <Marker coordinate={schoolCoordinates} />}
             </MapView>
 
             <View
