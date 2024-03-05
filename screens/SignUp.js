@@ -1,5 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React, { useCallback, useMemo, useReducer } from "react";
+import { useMutation } from "@tanstack/react-query";
+import React, { useCallback, useMemo, useReducer, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -15,6 +16,7 @@ import globalStyles, { colors, sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
 import FORM_FIELDS from "../consts/formData";
 import STATES from "../consts/states";
+import { createEmployee } from "../services/apiService";
 import useAuthStore from "../stores/useAuthStore";
 import getInitialState from "../utils/getInitialState";
 import renderInputItem from "../utils/renderInputItem";
@@ -22,28 +24,60 @@ import renderInputItem from "../utils/renderInputItem";
 const initialState = getInitialState(STATES);
 
 const RegisterTeacher = ({ navigation, route }) => {
-  const [arePasswordsVisible, togglePasswordsVisibility] = useReducer(
-    (state) => !state,
-    false,
-  );
+  // const [arePasswordsVisible, togglePasswordsVisibility] = useReducer(
+  //   (state) => !state,
+  //   false,
+  // );
   const [formData, setData] = useReducer(
     (state, data) => ({ ...state, ...data }),
     initialState,
   );
+  const [errors, setErrors] = useState({});
 
   const { role } = route.params;
 
-  const register = useAuthStore((state) => state.registerTest);
+  const setAsRegistered = useAuthStore((state) => state.setAsRegistered);
+
+  const registerMutation = useMutation({
+    mutationFn: createEmployee,
+    onSuccess: () => setAsRegistered(role),
+    onError: (data) => {
+      const {
+        response: {
+          data: { errors },
+        },
+      } = data;
+
+      console.log(data.response);
+      console.log("Errors", errors);
+      setErrors(errors);
+    },
+  });
+
+  const handleRegister = useCallback(() => {
+    if (!registerMutation.isPending) {
+      registerMutation.mutate({ role, ...formData });
+    }
+  }, [formData, registerMutation.isPending]);
 
   const renderItem = useCallback(
     ({ item }) => {
-      if (item.isPassword) {
+      // if (item.isPassword) {
+      //   item = {
+      //     ...item,
+      //     arePasswordsVisible,
+      //     togglePasswordsVisibility,
+      //   };
+      // }
+
+      if (errors && errors[item.state]) {
         item = {
           ...item,
-          arePasswordsVisible,
-          togglePasswordsVisibility,
+          enableErrors: !!errors[item.state],
+          validationMessage: errors[item.state],
         };
       }
+
       return renderInputItem({
         key: item.state,
         item,
@@ -51,7 +85,7 @@ const RegisterTeacher = ({ navigation, route }) => {
         setData,
       });
     },
-    [arePasswordsVisible, formData],
+    [errors, formData],
   );
 
   const signUpFields = useMemo(() => {
@@ -104,7 +138,7 @@ const RegisterTeacher = ({ navigation, route }) => {
                 marginVertical: sizes.medium,
               }}
               enableShadow
-              onPress={() => register(role)}
+              onPress={handleRegister}
             />
           </View>
         </View>
