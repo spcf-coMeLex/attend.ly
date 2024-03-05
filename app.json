@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Attend.ly",
-    "slug": "Attend.ly",
+    "slug": "Attendly",
     "scheme": "attendly",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -22,7 +22,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.melmatx.Attendly"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -30,6 +31,17 @@
     "plugins": [
       "expo-secure-store",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d521b5fd-980c-4a15-a9f1-93d1fae0ad1e"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/d521b5fd-980c-4a15-a9f1-93d1fae0ad1e"
+    }
   }
 }
