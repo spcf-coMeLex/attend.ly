@@ -1,5 +1,14 @@
 import ROLES from "./roles";
+import branchData from "./school/branches";
+import departmentData from "./school/departments";
+import programData from "./school/programs";
 import STATES from "./states";
+
+const emptyDropdownValue = {
+  value: "",
+  activeColor: "gray",
+  inactiveColor: "gray",
+};
 
 const FORM_FIELDS = [
   {
@@ -25,13 +34,11 @@ const FORM_FIELDS = [
     dropdownData: [
       {
         label: "Please select a gender:",
-        value: "",
-        activeColor: "gray",
-        inactiveColor: "gray",
+        ...emptyDropdownValue,
       },
-      { label: "Male", value: "Male" },
-      { label: "Female", value: "Female" },
-      { label: "Other", value: "Other" },
+      { label: "Male", value: "MALE" },
+      { label: "Female", value: "FEMALE" },
+      { label: "Other", value: "OTHER" },
     ],
   },
   {
@@ -44,6 +51,38 @@ const FORM_FIELDS = [
     state: STATES.ADDRESS,
     label: "Address",
     placeholder: "Enter your address",
+    forRole: ROLES.STUDENT,
+  },
+  {
+    state: STATES.PROGRAM,
+    label: "Program",
+    placeholder: "Enter your program",
+    isDropdown: true,
+    dropdownData: [
+      { label: "Please select a program:", ...emptyDropdownValue },
+      ...programData,
+    ],
+    forRole: ROLES.STUDENT,
+  },
+  {
+    state: STATES.BRANCH,
+    label: "Branch",
+    placeholder: "Enter your branch",
+    isDropdown: true,
+    dropdownData: [
+      { label: "Please select a branch:", ...emptyDropdownValue },
+      ...branchData,
+    ],
+  },
+  {
+    state: STATES.DEPARTMENT,
+    label: "Department",
+    placeholder: "Enter your department",
+    isDropdown: true,
+    dropdownData: [
+      { label: "Please select a department", ...emptyDropdownValue },
+      ...departmentData,
+    ],
   },
   {
     state: STATES.PARENTS_EMAIL,
@@ -52,18 +91,18 @@ const FORM_FIELDS = [
     isEmail: true,
     forRole: ROLES.STUDENT,
   },
-  {
-    state: STATES.PASSWORD,
-    label: "Password",
-    placeholder: "Enter your password",
-    isPassword: true,
-  },
-  {
-    state: STATES.CONFIRM_PASSWORD,
-    label: "Confirm Password",
-    placeholder: "Enter your password again",
-    isPassword: true,
-  },
+  // {
+  //   state: STATES.PASSWORD,
+  //   label: "Password",
+  //   placeholder: "Enter your password",
+  //   isPassword: true,
+  // },
+  // {
+  //   state: STATES.CONFIRM_PASSWORD,
+  //   label: "Confirm Password",
+  //   placeholder: "Enter your password again",
+  //   isPassword: true,
+  // },
 ];
 
 export default FORM_FIELDS;
