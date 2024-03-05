@@ -111,12 +111,12 @@ const useAuthStore = create((set, get) => ({
 
     return await WebBrowser.openBrowserAsync(url.toString());
   },
+  setAsRegistered: (role) => set({ isRegistered: true, role }),
   logout: async () => {
     await AsyncStorage.removeItem("delegation");
     set({ identity: "", isRegistered: false });
   },
   loginTest: () => set({ identity: "testIdentity" }),
-  registerTest: (role) => set({ isRegistered: true, role }),
 }));
 
 export default useAuthStore;
