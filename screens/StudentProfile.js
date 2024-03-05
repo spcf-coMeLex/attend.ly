@@ -21,8 +21,8 @@ import { Item } from "react-navigation-header-buttons";
 
 import globalStyles, { colors, sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
+import { STATUS, STATUS_COLORS } from "../consts/attendanceStatus";
 import chartConfig from "../consts/chartConfig";
-import { STATUS, STATUS_COLORS } from "../consts/status";
 import calendarTheme from "../utils/calendarTheme";
 import renderInputItem from "../utils/renderInputItem";
 
