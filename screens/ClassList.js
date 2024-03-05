@@ -8,31 +8,30 @@ import { Button, Card } from "react-native-ui-lib";
 
 import globalStyles, { sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
-import { useQRCodeContext } from "../contexts/QRCodeContext";
 import Routes from "../navigation/Routes";
 
 const classes = [
   {
     id: 1,
-    name: "CCIS3A",
+    code: "CCIS3A",
     students: 40,
     coverEmoji: "👨🏻‍💻",
   },
   {
     id: 2,
-    name: "CCIS4A",
+    code: "CCIS4A",
     students: 35,
     coverEmoji: "🎉",
   },
   {
     id: 3,
-    name: "CCIS5A",
+    code: "CCIS5A",
     students: 30,
     coverEmoji: "🤩",
   },
   {
     id: 4,
-    name: "CCIS6A",
+    code: "CCIS6A",
     students: 25,
     coverEmoji: "❤️",
   },
@@ -40,7 +39,6 @@ const classes = [
 
 const ClassList = ({ navigation }) => {
   const isFocused = useIsFocused();
-  const { setSection } = useQRCodeContext();
 
   const flatListRef = useRef(null);
 
@@ -48,10 +46,8 @@ const ClassList = ({ navigation }) => {
     ({ item }) => (
       <Card
         onPress={() => {
-          setSection(item.name);
-
           navigation.navigate(Routes.SUBJECT_LIST, {
-            className: item.name,
+            sectionCode: item.code,
           });
         }}
         style={{
@@ -72,7 +68,7 @@ const ClassList = ({ navigation }) => {
             ]}
           >
             <View style={{ rowGap: sizes.small }}>
-              <Text style={textStyles.subHeading}>{item.name}</Text>
+              <Text style={textStyles.subHeading}>{item.code}</Text>
               <Text style={textStyles.caption}>
                 {item.students} total students
               </Text>
