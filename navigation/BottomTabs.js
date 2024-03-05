@@ -5,9 +5,11 @@ import Routes from "./Routes";
 import { colors } from "../assets/styles/globalStyles";
 import ROLES from "../consts/roles";
 import ClassList from "../screens/ClassList";
-import Earn from "../screens/Earn";
+import EarnPoints from "../screens/EarnPoints";
 import HomeStudent from "../screens/HomeStudent";
 import HomeTeacher from "../screens/HomeTeacher";
+import ScanCode from "../screens/ScanCode";
+import Wallet from "../screens/Wallet";
 import useAuthStore from "../stores/useAuthStore";
 
 const Tab = createBottomTabNavigator();
@@ -25,9 +27,17 @@ const tabIcons = {
     focusedIcon: "people",
     unfocusedIcon: "people-outline",
   },
-  [Routes.EARN]: {
+  [Routes.EARN_POINTS]: {
     focusedIcon: "sparkles",
     unfocusedIcon: "sparkles-outline",
+  },
+  [Routes.WALLET]: {
+    focusedIcon: "wallet",
+    unfocusedIcon: "wallet-outline",
+  },
+  [Routes.SCAN_CODE]: {
+    focusedIcon: "scan",
+    unfocusedIcon: "scan-outline",
   },
 };
 
@@ -62,7 +72,8 @@ const BottomTabs = () => {
       {role === ROLES.STUDENT && (
         <>
           <Tab.Screen name={Routes.FEED} component={HomeStudent} />
-          <Tab.Screen name={Routes.EARN} component={Earn} />
+          <Tab.Screen name={Routes.EARN_POINTS} component={EarnPoints} />
+          <Tab.Screen name={Routes.WALLET} component={Wallet} />
         </>
       )}
 
@@ -72,6 +83,12 @@ const BottomTabs = () => {
           <Tab.Screen name={Routes.CLASS_LIST} component={ClassList} />
         </>
       )}
+
+      <Tab.Screen
+        name={Routes.SCAN_CODE}
+        component={ScanCode}
+        options={{ freezeOnBlur: true, unmountOnBlur: true }}
+      />
     </Tab.Navigator>
   );
 };
