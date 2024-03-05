@@ -22,7 +22,7 @@ import { Item } from "react-navigation-header-buttons";
 
 import globalStyles, { colors, sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
-import { STATUS, STATUS_COLORS } from "../consts/status";
+import { STATUS, STATUS_COLORS } from "../consts/attendanceStatus";
 import { useQRCodeContext } from "../contexts/QRCodeContext";
 import Routes from "../navigation/Routes";
 
