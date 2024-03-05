@@ -1,5 +1,8 @@
 import "react-native-polyfill-globals/auto";
+
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { NavigationContainer } from "@react-navigation/native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAssets } from "expo-asset";
 import { useFonts } from "expo-font";
 import * as Linking from "expo-linking";
@@ -10,6 +13,7 @@ import { Colors } from "react-native-ui-lib";
 import { useShallow } from "zustand/react/shallow";
 
 import globalStyles, { colors } from "./assets/styles/globalStyles";
+import { QRCodeProvider } from "./contexts/QRCodeContext";
 import MainNavigation from "./navigation/MainNavigation";
 import useAuthStore from "./stores/useAuthStore";
 
@@ -31,29 +35,39 @@ const App = () => {
     require("./assets/images/icon-back.png"),
     require("./assets/images/logo.png"),
     require("./assets/images/dfinity.png"),
+    require("./assets/images/card-mask.png"),
   ]);
 
-  const { isReady, fetchKeyAndIdentity, setIdentity } = useAuthStore(
+  const { isReady, identity, fetchKeyAndIdentity, setIdentity } = useAuthStore(
     useShallow((state) => ({
       isReady: state.isReady,
       fetchKeyAndIdentity: state.fetchKeyAndIdentity,
       setIdentity: state.setIdentity,
+      role: state.role,
     })),
   );
 
-  const url = Linking.useURL();
+  const queryClient = new QueryClient();
 
   useEffect(() => {
-    if (url) {
-      const { queryParams } = Linking.parse(url);
-      const delegation = queryParams.delegation;
+    const handleSetIdentity = ({ url }) => {
+      if (url && !identity) {
+        const { queryParams } = Linking.parse(url);
+        const delegation = queryParams.delegation;
 
-      if (delegation) {
-        setIdentity(delegation);
-        console.log("Done setting identity");
+        if (delegation) {
+          setIdentity(delegation);
+          console.log("Done setting identity");
+        }
       }
-    }
-  }, [url]);
+    };
+
+    const subscription = Linking.addEventListener("url", handleSetIdentity);
+
+    return () => {
+      subscription.remove();
+    };
+  }, [identity]);
 
   useEffect(() => {
     fetchKeyAndIdentity();
@@ -64,11 +78,17 @@ const App = () => {
   }
 
   return (
-    <GestureHandlerRootView style={globalStyles.flexFull}>
-      <NavigationContainer onReady={() => SplashScreen.hideAsync()}>
-        <MainNavigation />
-      </NavigationContainer>
-    </GestureHandlerRootView>
+    <QueryClientProvider client={queryClient}>
+      <GestureHandlerRootView style={globalStyles.flexFull}>
+        <BottomSheetModalProvider>
+          <NavigationContainer onReady={() => SplashScreen.hideAsync()}>
+            <QRCodeProvider>
+              <MainNavigation />
+            </QRCodeProvider>
+          </NavigationContainer>
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
+    </QueryClientProvider>
   );
 };
 
