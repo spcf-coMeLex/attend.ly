@@ -1,11 +1,9 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
-import React, { useLayoutEffect } from "react";
+import React from "react";
 import { FlatList, Text, View } from "react-native";
-import { BorderlessButton } from "react-native-gesture-handler";
 import { Button, Card } from "react-native-ui-lib";
-import { Item } from "react-navigation-header-buttons";
 
 import globalStyles, { colors, sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
@@ -52,20 +50,6 @@ const subjects = [
 
 const SubjectList = ({ navigation }) => {
   const { setSubject } = useQRCodeContext();
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <Item
-          renderButton={() => (
-            <BorderlessButton>
-              <Ionicons name="add" size={30} color={colors.tertiary} />
-            </BorderlessButton>
-          )}
-        />
-      ),
-    });
-  }, [navigation]);
 
   const renderItem = ({ item }) => (
     <Card
