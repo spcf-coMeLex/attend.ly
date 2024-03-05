@@ -1,0 +1,33 @@
+const programData = [
+  { label: "BSCS", value: "BSCS" },
+  { label: "BSIS", value: "BSIS" },
+  { label: "BSIT - NETAD", value: "BSIT - NETAD" },
+  { label: "BSIT - MOBILE DEV", value: "BSIT - MOBILE DEV" },
+  { label: "BSEMC - GAME DEV", value: "BSEMC - GAME DEV" },
+  {
+    label: "BSEMC - DIGITAL ANIMATION",
+    value: "BSEMC - DIGITAL ANIMATION",
+  },
+  { label: "ACT", value: "ACT" },
+  { label: "BAC", value: "BAC" },
+  { label: "BSSW", value: "BSSW" },
+  { label: "BEED", value: "BEED" },
+  { label: "BPE", value: "BPE" },
+  { label: "BSEM", value: "BSEM" },
+  { label: "BSEE", value: "BSEE" },
+  { label: "BSA", value: "BSA" },
+  { label: "BSAI", value: "BSAI" },
+  { label: "BSBA", value: "BSBA" },
+  { label: "BSCA", value: "BSCA" },
+  { label: "BSOA", value: "BSOA" },
+  { label: "BSREM", value: "BSREM" },
+  { label: "BSCE", value: "BSCE" },
+  { label: "BSELE", value: "BSELE" },
+  { label: "BSN", value: "BSN" },
+  { label: "BSHM", value: "BSHM" },
+  { label: "BSTM", value: "BSTM" },
+  { label: "BSC", value: "BSC" },
+  { label: "MIT", value: "MIT" },
+];
+
+export default programData;
