@@ -84,6 +84,8 @@ const ScanCode = ({ navigation, route }) => {
                 text: "OK",
                 onPress: () => {
                   Alert.alert(`Joined ${section}'s class for ${subject}`);
+
+                  navigation.navigate(Routes.SIGN_UP, { role: ROLES.STUDENT });
                 },
               },
             ],
