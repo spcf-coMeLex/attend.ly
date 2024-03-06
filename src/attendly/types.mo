@@ -33,8 +33,8 @@ module {
 
     public type Attendance = {
         studentId: Principal;
-        classId: Text;
-        subjectId: Text;
+        studentSectionId: Text;
+        sectionSubjectId: Text;
         day: Day;
         time: Text;
         attendanceType: StatusType;

@@ -118,8 +118,4 @@ actor Attendly {
     public shared query func getEmployees(): async [Principal] {
         Iter.toArray(Map.vals<Text, Principal>(employees));
     };
-
-     public shared(msg) func whoami(): async Principal {
-        return msg.caller;
-    }
 }
