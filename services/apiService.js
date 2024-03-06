@@ -1,5 +1,3 @@
-import * as Crypto from "expo-crypto";
-
 import AttendlyAPI from "./AttendlyAPI";
 
 /**
@@ -21,12 +19,8 @@ export const createEmployee = async (employeeData) => {
     birthDate,
   } = employeeData;
 
-  // Generate UUID
-  const employeeId = Crypto.randomUUID();
-
   // Create new employee
   return await AttendlyAPI.post("/employees/create", {
-    uId: employeeId,
     role,
     branchName,
     departmentCode,
@@ -93,12 +87,8 @@ export const createStudent = async (studentData) => {
     address,
   } = studentData;
 
-  // Generate UUID
-  const studentId = Crypto.randomUUID();
-
   // Create new student
   return await AttendlyAPI.post("/students/create", {
-    uId: studentId,
     role,
     programCode,
     branchName,
@@ -128,14 +118,15 @@ export const showStudentWallet = async (studentId) => {
 
 export const createAttendance = async (attendanceData) => {
   // Filter out all the form fields for attendance
-  const { teacherId, sectionSubjectCode, date, time, status } = attendanceData;
+  const { teacherId, studentId, sectionSubjectCode, date, time } =
+    attendanceData;
 
   // Create new attendance
   return await AttendlyAPI.post("/attendance/create", {
     uId: teacherId,
+    studentId,
     sectionSubjectCode,
     date,
     time,
-    status,
   });
 };
