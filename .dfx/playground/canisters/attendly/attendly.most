@@ -1,4 +1,22 @@
 // Version: 1.0.0
+type Attendance =
+  {
+    attendanceType : StatusType;
+    classId : Text;
+    day : Day;
+    studentId : Principal;
+    subjectId : Text;
+    time : Text
+  };
+type Attendance__1 = Attendance;
+type Day =
+  {#Friday; #Monday; #Saturday; #Sunday; #Thursday; #Tuesday; #Wednesday};
+type StatusType = {#In; #Out};
 actor {
-  
+  stable attendances :
+    [var ?([var ?Text], [var ?Attendance__1], [var Nat], [var Nat32])];
+  stable employees :
+    [var ?([var ?Text], [var ?Principal], [var Nat], [var Nat32])];
+  stable students :
+    [var ?([var ?Text], [var ?Principal], [var Nat], [var Nat32])]
 };
