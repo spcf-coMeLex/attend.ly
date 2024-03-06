@@ -192,8 +192,39 @@ const HomeStudent = ({ navigation }) => {
               <Text style={textStyles.subHeading}>
                 {format(time, "h:mm a")}
               </Text>
-              <Text style={textStyles.caption}>Current Subject: PLL</Text>
-              <Text style={textStyles.caption}>Upcoming Subject: DMATH</Text>
+              <Text style={textStyles.caption}>Current Subject: DMATH</Text>
+              {/* <Text style={textStyles.caption}>Upcoming Subject: DMATH</Text> */}
+            </View>
+          </Card>
+
+          <Card
+            style={[
+              globalStyles.row,
+              globalStyles.spaceBetween,
+              {
+                padding: sizes.large,
+                rowGap: sizes.large,
+              },
+            ]}
+          >
+            <View style={{ rowGap: sizes.large }}>
+              <Text style={textStyles.subTitle}>Upcoming Subject</Text>
+              <Text style={textStyles.subHeading}>PLL</Text>
+              <Text style={textStyles.caption}>9:00 AM - 12:00 PM</Text>
+            </View>
+
+            <View>
+              <View
+                style={{
+                  backgroundColor: "lightgray",
+                  padding: sizes.small,
+                  borderRadius: sizes.small,
+                }}
+              >
+                <Text style={textStyles.body} numberOfLines={6}>
+                  30 minutes left
+                </Text>
+              </View>
             </View>
           </Card>
 
