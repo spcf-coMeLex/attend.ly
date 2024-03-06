@@ -18,13 +18,6 @@
         "node_compatibility": true
       }
     },
-    "attendly_landing": {
-      "frontend": {
-        "entrypoint": "src/index.html"
-      },
-      "source": ["src/attendly_landing"],
-      "type": "assets"
-    },
     "ii_integration": {
       "type": "assets",
       "source": ["src/ii_integration/assets", "src/ii_integration/dist"]
