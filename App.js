@@ -38,19 +38,24 @@ const App = () => {
     require("./assets/images/card-mask.png"),
   ]);
 
-  const { isReady, identity, fetchKeyAndIdentity, setIdentity } = useAuthStore(
+  const { isReady, identity, setIdentity, fetchKeyAndIdentity } = useAuthStore(
     useShallow((state) => ({
       isReady: state.isReady,
-      fetchKeyAndIdentity: state.fetchKeyAndIdentity,
+      identity: state.identity,
       setIdentity: state.setIdentity,
-      role: state.role,
-    })),
+      fetchKeyAndIdentity: state.fetchKeyAndIdentity,
+      // logout: state.logout,
+    }))
   );
+
+  // useEffect(() => {
+  //   logout();
+  // }, []);
 
   const queryClient = new QueryClient();
 
   useEffect(() => {
-    const handleSetIdentity = ({ url }) => {
+    const handleSetIdentity = async ({ url }) => {
       if (url && !identity) {
         const { queryParams } = Linking.parse(url);
         const delegation = queryParams.delegation;

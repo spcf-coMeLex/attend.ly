@@ -1,12 +1,14 @@
 import { blsVerify } from "@dfinity/bls-verify";
 import { Platform } from "react-native";
 
-import { createActor } from "./declarations/attendance";
+import { createActor } from "./declarations/attendly";
 
-const CANISTER_ID = "bd3sg-teaaa-aaaaa-qaaba-cai";
+const CANISTER_ID = process.env.EXPO_PUBLIC_CANISTER_ID_ATTENDLY;
 
 const NETWORK =
-  Platform.OS === "android" ? "http://10.0.2.2:4943" : "http://127.0.0.1:4943";
+  Platform.OS === "android"
+    ? "http://10.0.2.2:4943"
+    : process.env.EXPO_PUBLIC_NGROK_URL;
 
 const getBackendActor = (identity) => {
   return createActor(CANISTER_ID, {

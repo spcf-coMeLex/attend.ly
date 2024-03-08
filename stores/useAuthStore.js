@@ -12,14 +12,15 @@ import * as WebBrowser from "expo-web-browser";
 import { URL } from "react-native-url-polyfill";
 import { create } from "zustand";
 
+import useProfileStore from "./useProfileStore";
 import getBackendActor from "../src/actor";
 
 const initialState = {
   baseKey: "",
   identity: "",
+  principal: "",
   isRegistered: false,
   isReady: false,
-  role: "",
 };
 
 const useAuthStore = create((set, get) => ({
@@ -46,14 +47,41 @@ const useAuthStore = create((set, get) => ({
       if (isDelegationValid(chain)) {
         const id = new DelegationIdentity(baseKey, chain);
 
+        // Get principal
+        // const principal = get().getPrincipal(id);
+
         // Set identity with the base key
-        set({ baseKey, identity: id, isReady: true });
+        set({ baseKey, identity: id });
       } else {
         await AsyncStorage.removeItem("delegation");
       }
     }
 
-    set({ baseKey, isReady: true });
+    // No delegation, set base key
+    set({ baseKey });
+
+    // Check if user is registered
+    const isRegistered = await AsyncStorage.getItem("isRegistered");
+
+    if (isRegistered === "true") {
+      console.log(isRegistered);
+      // Fetch role and profile
+      await useProfileStore.getState().fetchRoleAndProfile(get().identity);
+
+      set({ isRegistered: true });
+    }
+
+    set({ isReady: true });
+  },
+  getActor: (identity) => {
+    if (!identity && !get().identity) {
+      throw new Error("Identity not set");
+    }
+
+    return getBackendActor(identity || get().identity);
+  },
+  setIsRegistered: (isRegistered) => {
+    set({ isRegistered });
   },
   setIdentity: async (delegation) => {
     // Decode delegation from uri result
@@ -73,14 +101,18 @@ const useAuthStore = create((set, get) => ({
     // Dismiss the browser
     WebBrowser.dismissBrowser();
 
-    set({ identity: id });
-  },
-  getActor: () => {
-    if (!get().identity) {
-      throw new Error("Identity not set");
+    // Check if user is already registered
+    if (await useProfileStore.getState().fetchRoleAndProfile(id)) {
+      set({ isRegistered: true });
+
+      // Save registered status
+      await AsyncStorage.setItem("isRegistered", "true");
     }
 
-    return getBackendActor(get().identity);
+    // Get principal
+    // const principal = get().getPrincipal(id);
+
+    set({ identity: id });
   },
   login: async () => {
     if (!get().baseKey) {
@@ -91,15 +123,20 @@ const useAuthStore = create((set, get) => ({
     const publicDerKey = toHex(get().baseKey.getPublicKey().toDer());
 
     // Replace with own ii integration canister
+    // const url = new URL(
+    //   "http://127.0.0.1:4943/?canisterId=" +
+    //     process.env.EXPO_PUBLIC_CANISTER_ID_II_INTEGRATION
+    // );
     const url = new URL(
-      "http://127.0.0.1:4943/?canisterId=" +
-        process.env.EXPO_PUBLIC_CANISTER_ID_II_INTEGRATION,
+      process.env.EXPO_PUBLIC_NGROK_URL +
+        "/?canisterId=" +
+        process.env.EXPO_PUBLIC_CANISTER_ID_II_INTEGRATION
     );
 
     // Set internet identity canister
     url.searchParams.set(
       "ii_canisterId",
-      process.env.EXPO_PUBLIC_CANISTER_ID_INTERNET_IDENTITY,
+      process.env.EXPO_PUBLIC_CANISTER_ID_INTERNET_IDENTITY
     );
 
     // Set redirect uri
@@ -111,12 +148,14 @@ const useAuthStore = create((set, get) => ({
 
     return await WebBrowser.openBrowserAsync(url.toString());
   },
-  setAsRegistered: (role) => set({ isRegistered: true, role }),
   logout: async () => {
     await AsyncStorage.removeItem("delegation");
-    set({ identity: "", isRegistered: false });
+    await AsyncStorage.removeItem("isRegistered");
+    await useProfileStore.getState().clearProfile();
+
+    set({ identity: "", principal: "", isRegistered: false });
   },
-  loginTest: () => set({ identity: "testIdentity" }),
+  // loginTest: () => set({ identity: "testIdentity" }),
 }));
 
 export default useAuthStore;

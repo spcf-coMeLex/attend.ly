@@ -10,7 +10,7 @@ import HomeStudent from "../screens/HomeStudent";
 import HomeTeacher from "../screens/HomeTeacher";
 import ScanCode from "../screens/ScanCode";
 import Wallet from "../screens/Wallet";
-import useAuthStore from "../stores/useAuthStore";
+import useProfileStore from "../stores/useProfileStore";
 
 const Tab = createBottomTabNavigator();
 
@@ -59,7 +59,7 @@ const getTabBarIcon = (props, route) => {
 };
 
 const BottomTabs = () => {
-  const role = useAuthStore((state) => state.role);
+  const role = useProfileStore((state) => state.role);
 
   return (
     <Tab.Navigator

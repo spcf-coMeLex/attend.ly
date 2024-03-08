@@ -9,26 +9,30 @@ import AttendlyAPI from "./AttendlyAPI";
 export const createEmployee = async (employeeData) => {
   // Filter out all the form fields for employee
   const {
-    role,
-    branchName,
-    departmentCode,
+    principalId,
     firstName,
     middleName,
     lastName,
     gender,
     birthDate,
+    address,
+    sectionCode,
+    departmentCode,
+    branchName,
   } = employeeData;
 
   // Create new employee
   return await AttendlyAPI.post("/employees/create", {
-    role,
-    branchName,
-    departmentCode,
+    principalId,
     firstName,
     middleName,
     lastName,
     gender,
     birthDate,
+    address,
+    sectionCode,
+    departmentCode,
+    branchName,
   });
 };
 
@@ -51,10 +55,9 @@ export const showTeacherSectionSubject = async (teacherId, sectionCode) => {
   });
 };
 
-export const showTeacherSubject = async (subjectCode, status) => {
+export const showTeacherSubject = async (subjectCode) => {
   return await AttendlyAPI.post("/employees/subject/show", {
     subjectCode,
-    status,
   });
 };
 
@@ -73,34 +76,34 @@ export const showTeacherStudentInfo = async (studentId) => {
 export const createStudent = async (studentData) => {
   // Filter out all the form fields for student
   const {
-    role,
-    programCode,
-    branchName,
-    departmentCode,
-    sectionCode,
+    principalId,
     firstName,
     middleName,
     lastName,
-    parentsEmail,
     gender,
     birthDate,
+    parentsEmail,
+    sectionCode,
     address,
+    programCode,
+    departmentCode,
+    branchName,
   } = studentData;
 
   // Create new student
   return await AttendlyAPI.post("/students/create", {
-    role,
-    programCode,
-    branchName,
-    departmentCode,
-    sectionCode,
+    principalId,
     firstName,
     middleName,
     lastName,
-    parentsEmail,
     gender,
     birthDate,
+    parentsEmail,
+    sectionCode,
     address,
+    programCode,
+    departmentCode,
+    branchName,
   });
 };
 

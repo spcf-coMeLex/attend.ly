@@ -1,7 +1,7 @@
 import ROLES from "./roles";
 import branchData from "./school/branches";
 import departmentData from "./school/departments";
-import programData from "./school/programs";
+import sectionData from "./school/section";
 import STATES from "./states";
 
 const emptyDropdownValue = {
@@ -51,19 +51,29 @@ const FORM_FIELDS = [
     state: STATES.ADDRESS,
     label: "Address",
     placeholder: "Enter your address",
-    forRole: ROLES.STUDENT,
   },
   {
-    state: STATES.PROGRAM,
-    label: "Program",
-    placeholder: "Enter your program",
+    state: STATES.SECTION,
+    label: "Section",
+    placeholder: "Enter your section",
     isDropdown: true,
     dropdownData: [
-      { label: "Please select a program:", ...emptyDropdownValue },
-      ...programData,
+      { label: "Please select a section:", ...emptyDropdownValue },
+      ...sectionData,
     ],
     forRole: ROLES.STUDENT,
   },
+  // {
+  //   state: STATES.PROGRAM,
+  //   label: "Program",
+  //   placeholder: "Enter your program",
+  //   isDropdown: true,
+  //   dropdownData: [
+  //     { label: "Please select a program:", ...emptyDropdownValue },
+  //     ...programData,
+  //   ],
+  //   forRole: ROLES.STUDENT,
+  // },
   {
     state: STATES.BRANCH,
     label: "Branch",
@@ -73,6 +83,7 @@ const FORM_FIELDS = [
       { label: "Please select a branch:", ...emptyDropdownValue },
       ...branchData,
     ],
+    forRole: ROLES.TEACHER,
   },
   {
     state: STATES.DEPARTMENT,
@@ -83,6 +94,7 @@ const FORM_FIELDS = [
       { label: "Please select a department", ...emptyDropdownValue },
       ...departmentData,
     ],
+    forRole: ROLES.TEACHER,
   },
   {
     state: STATES.PARENTS_EMAIL,

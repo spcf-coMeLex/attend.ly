@@ -12,14 +12,16 @@ import globalStyles, { colors, sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
 import ROLES from "../consts/roles";
 import Routes from "../navigation/Routes";
-import useAuthStore from "../stores/useAuthStore";
+import useProfileStore from "../stores/useProfileStore";
 
 const ScanCode = ({ navigation, route }) => {
   const [code, setCode] = useState("");
   const [torch, toggleTorch] = useReducer((state) => !state, false);
   const [permission, requestPermission] = useCameraPermissions();
   const isFocused = useIsFocused();
-  const role = useAuthStore((state) => state.role);
+  const storedRole = useProfileStore((state) => state.role);
+
+  const { role } = route.params;
 
   const stackView = route.params?.stackView;
 
@@ -29,6 +31,7 @@ const ScanCode = ({ navigation, route }) => {
 
   const onQRScanned = useCallback(
     ({ data }) => {
+      console.log(data);
       if (data === code) {
         return;
       }
@@ -54,22 +57,34 @@ const ScanCode = ({ navigation, route }) => {
                 text: "OK",
                 onPress: () => {
                   Alert.alert(
-                    `A notification has been sent to ${student}'s for ${attendance}`,
+                    `A notification has been sent to ${student}'s for ${attendance}`
                   );
                 },
               },
-            ],
+            ]
           );
         }
       };
 
       const hanndleJoinClass = (data) => {
-        const { section, subject } = JSON.parse(data) || {};
+        const {
+          sectionCode,
+          subjectCode,
+          departmentCode,
+          branchName,
+          programCode,
+        } = JSON.parse(data) || {};
 
-        if (section && subject) {
+        if (
+          sectionCode &&
+          subjectCode &&
+          departmentCode &&
+          branchName &&
+          programCode
+        ) {
           Alert.alert(
             "Join Class",
-            `You are about to join ${section}'s class for ${subject}`,
+            `You are about to join ${sectionCode}'s class for ${subjectCode}`,
             [
               {
                 text: "Cancel",
@@ -83,27 +98,31 @@ const ScanCode = ({ navigation, route }) => {
               {
                 text: "OK",
                 onPress: () => {
-                  Alert.alert(`Joined ${section}'s class for ${subject}`);
+                  Alert.alert(
+                    `Joined ${sectionCode}'s class for ${subjectCode}`
+                  );
 
                   navigation.navigate(Routes.SIGN_UP, { role: ROLES.STUDENT });
                 },
               },
-            ],
+            ]
           );
         }
       };
 
-      if (role === ROLES.TEACHER) {
+      const selectedRole = role ?? selectedRole;
+
+      if (selectedRole === ROLES.TEACHER) {
         handleAttendance(data);
       }
 
-      if (role === ROLES.STUDENT) {
+      if (selectedRole === ROLES.STUDENT) {
         hanndleJoinClass(data);
       }
 
       setCode(data);
     },
-    [code],
+    [code, storedRole, role]
   );
 
   return (
@@ -187,7 +206,7 @@ const ScanCode = ({ navigation, route }) => {
                 marginVertical: sizes.medium,
               }}
               enableShadow
-              // disabled={!code}
+              disabled={!code}
               onPress={() =>
                 navigation.navigate(Routes.SIGN_UP, {
                   role: ROLES.STUDENT,

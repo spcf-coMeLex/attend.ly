@@ -83,7 +83,7 @@ const ClassList = ({ navigation }) => {
         </View>
       </Card>
     ),
-    [],
+    []
   );
 
   useScrollToTop(flatListRef);

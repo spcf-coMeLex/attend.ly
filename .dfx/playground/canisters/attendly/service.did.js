@@ -1,35 +1,79 @@
 export const idlFactory = ({ IDL }) => {
-  const Day = IDL.Variant({
-    'Saturday' : IDL.Null,
-    'Thursday' : IDL.Null,
-    'Sunday' : IDL.Null,
-    'Tuesday' : IDL.Null,
-    'Friday' : IDL.Null,
-    'Wednesday' : IDL.Null,
-    'Monday' : IDL.Null,
-  });
-  const StatusType = IDL.Variant({ 'In' : IDL.Null, 'Out' : IDL.Null });
   const Attendance = IDL.Record({
-    'day' : Day,
-    'studentId' : IDL.Principal,
-    'time' : IDL.Text,
-    'classId' : IDL.Text,
-    'attendanceType' : StatusType,
-    'subjectId' : IDL.Text,
+    'studentId' : IDL.Text,
+    'serialized' : IDL.Text,
+    'hashed' : IDL.Text,
   });
-  const Result = IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text });
-  const Result_2 = IDL.Variant({ 'ok' : Attendance, 'err' : IDL.Text });
-  const Result_1 = IDL.Variant({ 'ok' : IDL.Principal, 'err' : IDL.Text });
+  const MessageResult = IDL.Record({ 'message' : IDL.Text });
+  const Result_4 = IDL.Variant({ 'ok' : MessageResult, 'err' : MessageResult });
+  const CreateStudentPayload = IDL.Record({
+    'id' : IDL.Opt(IDL.Text),
+    'departmentCode' : IDL.Text,
+    'birthDate' : IDL.Text,
+    'sectionCode' : IDL.Text,
+    'middleName' : IDL.Opt(IDL.Text),
+    'address' : IDL.Text,
+    'gender' : IDL.Text,
+    'programCode' : IDL.Text,
+    'branchName' : IDL.Text,
+    'parentsEmail' : IDL.Text,
+    'lastName' : IDL.Text,
+    'firstName' : IDL.Text,
+  });
+  const Result_3 = IDL.Variant({
+    'ok' : IDL.Record({ 'id' : IDL.Text, 'message' : IDL.Text }),
+    'err' : MessageResult,
+  });
+  const CreateTeacherPayload = IDL.Record({
+    'id' : IDL.Opt(IDL.Text),
+    'departmentCode' : IDL.Text,
+    'birthDate' : IDL.Text,
+    'middleName' : IDL.Opt(IDL.Text),
+    'address' : IDL.Text,
+    'gender' : IDL.Text,
+    'branchName' : IDL.Text,
+    'lastName' : IDL.Text,
+    'firstName' : IDL.Text,
+  });
+  const Teacher = IDL.Record({
+    'id' : IDL.Text,
+    'departmentCode' : IDL.Text,
+    'birthDate' : IDL.Text,
+    'middleName' : IDL.Opt(IDL.Text),
+    'address' : IDL.Text,
+    'gender' : IDL.Text,
+    'branchName' : IDL.Text,
+    'lastName' : IDL.Text,
+    'firstName' : IDL.Text,
+  });
+  const Result_2 = IDL.Variant({
+    'ok' : IDL.Record({ 'role' : IDL.Text, 'profile' : Teacher }),
+    'err' : MessageResult,
+  });
+  const Student = IDL.Record({
+    'id' : IDL.Text,
+    'departmentCode' : IDL.Text,
+    'birthDate' : IDL.Text,
+    'sectionCode' : IDL.Text,
+    'middleName' : IDL.Opt(IDL.Text),
+    'address' : IDL.Text,
+    'gender' : IDL.Text,
+    'programCode' : IDL.Text,
+    'branchName' : IDL.Text,
+    'parentsEmail' : IDL.Text,
+    'lastName' : IDL.Text,
+    'points' : IDL.Float64,
+    'firstName' : IDL.Text,
+  });
+  const Result_1 = IDL.Variant({ 'ok' : Student, 'err' : MessageResult });
+  const Result = IDL.Variant({ 'ok' : Teacher, 'err' : MessageResult });
   return IDL.Service({
-    'createAttendance' : IDL.Func([IDL.Text, Attendance], [Result], []),
-    'employeesRegister' : IDL.Func([IDL.Text], [Result], []),
-    'getAttendances' : IDL.Func([], [IDL.Vec(Attendance)], ['query']),
-    'getEmployees' : IDL.Func([], [IDL.Vec(IDL.Principal)], ['query']),
-    'getStudents' : IDL.Func([], [IDL.Vec(IDL.Principal)], ['query']),
-    'showAttendance' : IDL.Func([IDL.Text], [Result_2], ['query']),
-    'showEmployee' : IDL.Func([IDL.Text], [Result_1], ['query']),
-    'showStudent' : IDL.Func([IDL.Text], [Result_1], ['query']),
-    'studentRegister' : IDL.Func([IDL.Text], [Result], []),
+    'createAttendance' : IDL.Func([Attendance], [Result_4], []),
+    'createStudent' : IDL.Func([CreateStudentPayload], [Result_3], []),
+    'createTeacher' : IDL.Func([CreateTeacherPayload], [Result_3], []),
+    'getRoleAndProfile' : IDL.Func([], [Result_2], []),
+    'getStudent' : IDL.Func([IDL.Principal], [Result_1], []),
+    'getTeacher' : IDL.Func([IDL.Principal], [Result], []),
     'whoami' : IDL.Func([], [IDL.Principal], []),
   });
 };

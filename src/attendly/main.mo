@@ -1,121 +1,274 @@
-import HashMap "mo:base/HashMap";
-import Hash "mo:base/Hash";
-import Text "mo:base/Text";
-import Principal "mo:base/Principal";
-import Option "mo:base/Option";
-import Error "mo:base/Error";
-import Iter "mo:base/Iter";
-import Map "mo:base/Map";
+import Map "mo:map/Map";
 import { phash } "mo:map/Map";
 import { thash } "mo:map/Map";
+import Result "mo:base/Result";
+import Principal "mo:base/Principal";
+import Nat "mo:base/Nat";
+import Iter "mo:base/Iter";
+import Array "mo:base/Array";
+import Buffer "mo:base/Buffer";
 import Types "types";
+import Source "mo:uuid/async/SourceV4";
+import UUID "mo:uuid/UUID";
 
 actor Attendly {
+  type Id = Text;
 
-    type Result<Ok, Err> = Types.Result<Ok, Err>;
-    type HashMap<K, V> = Types.HashMap<K, V>;
-    // type Student = Types.Student;
-    // type Employee = Types.Employee;
-    type Attendance = Types.Attendance;
+  type MessageResult = {
+    message : Text;
+  };
 
-    stable let students = Map.new<Text, Principal>();
-    stable let employees = Map.new<Text, Principal>();
-    stable let attendances = Map.new<Text, Attendance>();
+  type User = {
+    id : Text;
+    firstName : Text;
+    middleName : ?Text;
+    lastName : Text;
+    gender : Text;
+    birthDate : Text;
+    address : Text;
+    departmentCode : Text;
+    branchName : Text;
+  };
 
-    public shared ({caller}) func studentRegister(uId: Text): async Result<Text, Text> {
+  type Teacher = User;
 
-        if (Principal.isAnonymous(caller)) {
-            return #err("Registration error: Anonymous identity found!");
-        } else 
-        if (Map.get<Text, Principal>(students, thash, uId) == ?caller) {
-            return #err("Registration error: Student already registered!");
-        } else {        
-            switch(Map.add<Text, Principal>(students, thash, uId, caller)) {
-                case(null){
-                    return #ok("Student Account Created Successfully!");
-                };
-                case(?student){
-                    return #err("Something went wrong!");
-                }
-            };  
-        }
+  type Student = User and {
+    sectionCode : Text;
+    programCode : Text;
+    parentsEmail : Text;
+    points : Float;
+  };
+
+  type Section = {
+    id : Text;
+    teacherId : Text;
+    name : Text;
+  };
+
+  type Subject = {
+    id : Text;
+    teacherId : Text;
+    name : Text;
+  };
+
+  type CreateStudentPayload = {
+    id : ?Text;
+    firstName : Text;
+    middleName : ?Text;
+    lastName : Text;
+    gender : Text;
+    birthDate : Text;
+    address : Text;
+    parentsEmail : Text;
+    sectionCode : Text;
+    programCode : Text;
+    departmentCode : Text;
+    branchName : Text;
+  };
+
+  type CreateTeacherPayload = {
+    id : ?Text;
+    firstName : Text;
+    middleName : ?Text;
+    lastName : Text;
+    gender : Text;
+    birthDate : Text;
+    address : Text;
+    departmentCode : Text;
+    branchName : Text;
+  };
+
+  type Attendance = {
+    studentId : Text;
+    serialized : Text;
+    hashed : Text;
+  };
+
+  stable let students = Map.new<Principal, Student>();
+  stable let teachers = Map.new<Principal, Teacher>();
+  stable let teacherStudents = Map.new<Principal, [Student]>();
+  stable var attendances : [Attendance] = [];
+
+  func isStudent(caller : Principal) : Bool {
+    switch (Map.contains(students, phash, caller)) {
+      case (null) {
+        return false;
+      };
+      case (?student) {
+        return true;
+      };
     };
+  };
 
-    public shared ({caller}) func employeesRegister(uId: Text): async Result<Text, Text> {
-        if (Principal.isAnonymous(caller)) {
-            return #err("Registration error: Anonymous identity found!");
-        } else if (Map.get<Text, Principal>(employees, thash, uId) == ?caller) {
-            return #err("Registration error: Employee already registered!");
-        } else {        
-            switch(Map.add<Text, Principal>(employees, thash, uId, caller)) {
-                case(null){
-                    return #ok("Employee Account Created Successfully!");
-                };
-                case(?employee){
-                    return #err("");
-                }
-            };  
-        }
+  func isTeacher(caller : Principal) : Bool {
+    switch (Map.contains(teachers, phash, caller)) {
+      case (null) {
+        return false;
+      };
+      case (?teacher) {
+        return true;
+      };
     };
+  };
 
-    public shared query func showEmployee(uId : Text) : async Result<Principal, Text> {
-        switch (Map.get<Text, Principal>(employees, thash, uId)) {
-            case (null) {
-                return #err("Employee does not exist");
-            };
-            case (?employee) {
-                return #ok(employee);
-            };
+  func generateUUID() : async Text {
+    let g = Source.Source();
+    return UUID.toText(await g.new());
+  };
+
+  public shared (msg) func whoami() : async Principal {
+    msg.caller;
+  };
+
+  public shared ({ caller }) func getRoleAndProfile() : async Result.Result<{ role : Text; profile : Teacher or Student }, MessageResult> {
+    if (isStudent(caller)) {
+      switch (Map.get(students, phash, caller)) {
+        case (null) {};
+        case (?student) {
+          return #ok({ role = "STUDENT"; profile = student });
         };
+      };
     };
 
-    public shared query func showStudent(uId : Text) : async Result<Principal, Text> {
-        switch (Map.get<Text, Principal>(students, thash, uId)) {
-            case (null) {
-                return #err("Student does not exist");
-            };
-            case (?student) {
-                return #ok(student);
-            };
+    if (isTeacher(caller)) {
+      switch (Map.get(teachers, phash, caller)) {
+        case (null) {};
+        case (?teacher) {
+          return #ok({ role = "TEACHER"; profile = teacher });
         };
+      };
     };
 
-    public shared func createAttendance(uId : Text, attendanceInfo : Attendance) : async Result<Text, Text> {
-        if (Map.has<Text, Attendance>(attendances, thash, uId)){
-            return #err("Attendance Error: provided uId already existed!");
-        } else{
-            switch(Map.add<Text, Attendance>(attendances, thash, uId, attendanceInfo)){
-                case(null){
-                    return #ok("Employee Account Created Successfully!");
-                };
-                case(?attendance){
-                    return #err("Something went wrong!");
-                }
-            };
-            
-        }
+    return #err({ message = "No role found!" });
+  };
+
+  public shared ({ caller }) func createStudent(payload : CreateStudentPayload) : async Result.Result<MessageResult and { id : Text }, MessageResult> {
+    if (Principal.isAnonymous(caller)) {
+      return #err({ message = "Anonymous identity found!" });
     };
 
-    public shared query func showAttendance(uId : Text) : async Result<Attendance, Text> {
-        switch (Map.get<Text, Attendance>(attendances, thash, uId)) {
-            case (null) {
-                return #err("Member does not exist");
-            };
-            case (?attendance) {
-                return #ok(attendance);
-            };
+    // Generate student id
+    let studentId : Text = do {
+      switch (payload.id) {
+        case (null) {
+          await generateUUID();
         };
+        case (?id) {
+          id;
+        };
+      };
     };
 
-    public shared query func getStudents(): async [Principal] {
-        Iter.toArray(Map.vals<Text, Principal>(students));
+    let newStudent : Student = {
+      id = studentId;
+      firstName = payload.firstName;
+      middleName = payload.middleName;
+      lastName = payload.lastName;
+      gender = payload.gender;
+      birthDate = payload.birthDate;
+      address = payload.address;
+      departmentCode = payload.departmentCode;
+      branchName = payload.branchName;
+      sectionCode = payload.sectionCode;
+      programCode = payload.programCode;
+      parentsEmail = payload.parentsEmail;
+      points = 0.0;
     };
 
-    public shared query func getAttendances(): async [Attendance] {
-        Iter.toArray(Map.vals<Text, Attendance>(attendances));
+    // Create new student
+    switch (Map.add(students, phash, caller, newStudent)) {
+      case (null) {
+        return #ok({
+          message = "Student account created successfully!";
+          id = studentId;
+        });
+      };
+      case (?student) {
+        return #err({ message = "Student already exists!" });
+      };
+    };
+  };
+
+  public shared ({ caller }) func createTeacher(payload : CreateTeacherPayload) : async Result.Result<MessageResult and { id : Text }, MessageResult> {
+    // if (Principal.isAnonymous(caller)) {
+    //   return #err({ message = "Anonymous identity found!" });
+    // };
+
+    // Generate teacher id
+    let teacherId : Text = do {
+      switch (payload.id) {
+        case (null) {
+          await generateUUID();
+        };
+        case (?id) {
+          id;
+        };
+      };
     };
 
-    public shared query func getEmployees(): async [Principal] {
-        Iter.toArray(Map.vals<Text, Principal>(employees));
+    let newTeacher : Teacher = {
+      id = teacherId;
+      firstName = payload.firstName;
+      middleName = payload.middleName;
+      lastName = payload.lastName;
+      gender = payload.gender;
+      birthDate = payload.birthDate;
+      address = payload.address;
+      departmentCode = payload.departmentCode;
+      branchName = payload.branchName;
     };
-}
+
+    // Add new teacher
+    switch (Map.add(teachers, phash, caller, newTeacher)) {
+      case (null) {
+        return #ok({
+          message = "Teacher account created successfully!";
+          id = teacherId;
+        });
+      };
+      case (?teacher) {
+        return #err({ message = "Teacher already exists!" });
+      };
+    };
+  };
+
+  public shared ({ caller }) func createAttendance(payload : Attendance) : async Result.Result<MessageResult, MessageResult> {
+    if (not isTeacher(caller)) {
+      return #err({ message = "You need to be a teacher to do this!" });
+    };
+
+    let newAttendance = {
+      studentId = payload.studentId;
+      serialized = payload.serialized;
+      hashed = payload.hashed;
+    };
+
+    let attendanceBuffer = Buffer.fromArray<Attendance>(attendances);
+    attendanceBuffer.add(newAttendance);
+    attendances := Buffer.toArray<Attendance>(attendanceBuffer);
+
+    return #ok({ message = "Attendance created successfully!" });
+  };
+
+  public func getStudent(principal : Principal) : async Result.Result<Student, MessageResult> {
+    switch (Map.get(students, phash, principal)) {
+      case (null) {
+        return #err({ message = "No student found" });
+      };
+      case (?student) {
+        return #ok(student);
+      };
+    };
+  };
+
+  public func getTeacher(principal : Principal) : async Result.Result<Teacher, MessageResult> {
+    switch (Map.get(teachers, phash, principal)) {
+      case (null) {
+        return #err({ message = "No teacher found" });
+      };
+      case (?teacher) {
+        return #ok(teacher);
+      };
+    };
+  };
+};

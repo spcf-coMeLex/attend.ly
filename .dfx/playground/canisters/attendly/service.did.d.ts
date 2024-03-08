@@ -3,38 +3,79 @@ import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
 export interface Attendance {
-  'day' : Day,
-  'studentId' : Principal,
-  'time' : string,
-  'classId' : string,
-  'attendanceType' : StatusType,
-  'subjectId' : string,
+  'studentId' : string,
+  'serialized' : string,
+  'hashed' : string,
 }
-export type Day = { 'Saturday' : null } |
-  { 'Thursday' : null } |
-  { 'Sunday' : null } |
-  { 'Tuesday' : null } |
-  { 'Friday' : null } |
-  { 'Wednesday' : null } |
-  { 'Monday' : null };
-export type Result = { 'ok' : string } |
-  { 'err' : string };
-export type Result_1 = { 'ok' : Principal } |
-  { 'err' : string };
-export type Result_2 = { 'ok' : Attendance } |
-  { 'err' : string };
-export type StatusType = { 'In' : null } |
-  { 'Out' : null };
+export interface CreateStudentPayload {
+  'id' : [] | [string],
+  'departmentCode' : string,
+  'birthDate' : string,
+  'sectionCode' : string,
+  'middleName' : [] | [string],
+  'address' : string,
+  'gender' : string,
+  'programCode' : string,
+  'branchName' : string,
+  'parentsEmail' : string,
+  'lastName' : string,
+  'firstName' : string,
+}
+export interface CreateTeacherPayload {
+  'id' : [] | [string],
+  'departmentCode' : string,
+  'birthDate' : string,
+  'middleName' : [] | [string],
+  'address' : string,
+  'gender' : string,
+  'branchName' : string,
+  'lastName' : string,
+  'firstName' : string,
+}
+export interface MessageResult { 'message' : string }
+export type Result = { 'ok' : Teacher } |
+  { 'err' : MessageResult };
+export type Result_1 = { 'ok' : Student } |
+  { 'err' : MessageResult };
+export type Result_2 = { 'ok' : { 'role' : string, 'profile' : Teacher } } |
+  { 'err' : MessageResult };
+export type Result_3 = { 'ok' : { 'id' : string, 'message' : string } } |
+  { 'err' : MessageResult };
+export type Result_4 = { 'ok' : MessageResult } |
+  { 'err' : MessageResult };
+export interface Student {
+  'id' : string,
+  'departmentCode' : string,
+  'birthDate' : string,
+  'sectionCode' : string,
+  'middleName' : [] | [string],
+  'address' : string,
+  'gender' : string,
+  'programCode' : string,
+  'branchName' : string,
+  'parentsEmail' : string,
+  'lastName' : string,
+  'points' : number,
+  'firstName' : string,
+}
+export interface Teacher {
+  'id' : string,
+  'departmentCode' : string,
+  'birthDate' : string,
+  'middleName' : [] | [string],
+  'address' : string,
+  'gender' : string,
+  'branchName' : string,
+  'lastName' : string,
+  'firstName' : string,
+}
 export interface _SERVICE {
-  'createAttendance' : ActorMethod<[string, Attendance], Result>,
-  'employeesRegister' : ActorMethod<[string], Result>,
-  'getAttendances' : ActorMethod<[], Array<Attendance>>,
-  'getEmployees' : ActorMethod<[], Array<Principal>>,
-  'getStudents' : ActorMethod<[], Array<Principal>>,
-  'showAttendance' : ActorMethod<[string], Result_2>,
-  'showEmployee' : ActorMethod<[string], Result_1>,
-  'showStudent' : ActorMethod<[string], Result_1>,
-  'studentRegister' : ActorMethod<[string], Result>,
+  'createAttendance' : ActorMethod<[Attendance], Result_4>,
+  'createStudent' : ActorMethod<[CreateStudentPayload], Result_3>,
+  'createTeacher' : ActorMethod<[CreateTeacherPayload], Result_3>,
+  'getRoleAndProfile' : ActorMethod<[], Result_2>,
+  'getStudent' : ActorMethod<[Principal], Result_1>,
+  'getTeacher' : ActorMethod<[Principal], Result>,
   'whoami' : ActorMethod<[], Principal>,
 }
 export declare const idlFactory: IDL.InterfaceFactory;

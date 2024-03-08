@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { BorderlessButton } from "react-native-gesture-handler";
 import { Button } from "react-native-ui-lib";
+import { useShallow } from "zustand/react/shallow";
 
 import globalStyles, { colors, sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
@@ -21,6 +22,8 @@ import STATES from "../consts/states";
 import { useQRCodeContext } from "../contexts/QRCodeContext";
 import { createEmployee, createStudent } from "../services/apiService";
 import useAuthStore from "../stores/useAuthStore";
+import useICPFetching from "../stores/useICPFetching";
+import useProfileStore from "../stores/useProfileStore";
 import getInitialState from "../utils/getInitialState";
 import renderInputItem from "../utils/renderInputItem";
 
@@ -33,37 +36,95 @@ const RegisterTeacher = ({ navigation, route }) => {
   // );
   const [formData, setData] = useReducer(
     (state, data) => ({ ...state, ...data }),
-    initialState,
+    initialState
   );
   const [errors, setErrors] = useState({});
 
   const { role } = route.params;
 
-  const setAsRegistered = useAuthStore((state) => state.setAsRegistered);
+  const { identity, getActor, setIsRegistered } = useAuthStore(
+    useShallow((state) => ({
+      identity: state.identity,
+      getActor: state.getActor,
+      setIsRegistered: state.setIsRegistered,
+    }))
+  );
+  const fetchRoleAndProfile = useProfileStore(
+    (state) => state.fetchRoleAndProfile
+  );
+  const { isFetching, setIsFetching } = useICPFetching(
+    useShallow((state) => ({
+      isFetching: state.isFetching,
+      setIsFetching: state.setIsFetching,
+    }))
+  );
   const { qrValue } = useQRCodeContext();
 
   const registerMutation = useMutation({
     mutationFn: role === ROLES.TEACHER ? createEmployee : createStudent,
-    onSuccess: () => setAsRegistered(role),
-    onError: (data) => {
+    onSuccess: async ({ data }) => {
+      const actor = getActor();
+
+      const createUser =
+        role === ROLES.TEACHER ? actor.createTeacher : actor.createStudent;
+
+      setIsFetching(true);
+      try {
+        await createUser({
+          ...data,
+          // Optional fields
+          id: data.id || [],
+          middleName: data.middleName || [],
+        });
+
+        await fetchRoleAndProfile(identity);
+        setIsRegistered(true);
+      } catch (e) {
+        console.log("Error", e);
+      } finally {
+        setIsFetching(false);
+      }
+    },
+    onError: ({ response }) => {
       const {
-        response: {
-          data: { errors },
-        },
-      } = data;
+        data: { errors },
+      } = response;
 
       console.log("Errors", errors);
-      console.log(data.response);
+      console.log(response);
       setErrors(errors);
     },
   });
 
-  const handleRegister = useCallback(() => {
+  const handleRegister = useCallback(async () => {
     // if (!registerMutation.isPending) {
-    //   registerMutation.mutate({ role, ...qrValue, ...formData });
+    //   const actor = getActor();
+
+    //   let registrationData = formData;
+
+    //   // Add principalId to registration data
+    //   setIsFetching(true);
+    //   try {
+    //     const principal = await actor.whoami();
+    //     registrationData.principalId = principal.toText();
+    //   } catch (e) {
+    //     console.log(e);
+    //   } finally {
+    //     setIsFetching(false);
+    //   }
+
+    //   // Add qr value to registration data
+    //   if (role === ROLES.STUDENT) {
+    //     registrationData = {
+    //       ...registrationData,
+    //       ...qrValue,
+    //     };
+    //   }
+
+    //   registerMutation.mutate(registrationData);
     // }
-    setAsRegistered(role);
-  }, [formData, registerMutation.isPending, qrValue]);
+    setIsRegistered(true);
+  }, [formData, identity, qrValue, registerMutation.isPending]);
 
   const renderItem = useCallback(
     ({ item }) => {
@@ -90,12 +151,12 @@ const RegisterTeacher = ({ navigation, route }) => {
         setData,
       });
     },
-    [errors, formData],
+    [errors, formData]
   );
 
   const signUpFields = useMemo(() => {
     return FORM_FIELDS.filter(
-      (field) => !field.forRole || field.forRole === role,
+      (field) => !field.forRole || field.forRole === role
     );
   }, [role]);
 
@@ -136,17 +197,21 @@ const RegisterTeacher = ({ navigation, route }) => {
             </ScrollView>
 
             <Button
-              label={registerMutation.isPending ? " " : "Register"}
+              label={
+                registerMutation.isPending || isFetching ? " " : "Register"
+              }
               labelStyle={textStyles.subTitle}
               style={{
                 marginHorizontal: sizes.xlarge,
                 marginVertical: sizes.medium,
               }}
               enableShadow
-              disabled={registerMutation.isPending}
+              disabled={registerMutation.isPending || isFetching}
               onPress={handleRegister}
             >
-              {registerMutation.isPending && <ActivityIndicator />}
+              {(registerMutation.isPending || isFetching) && (
+                <ActivityIndicator />
+              )}
             </Button>
           </View>
         </View>

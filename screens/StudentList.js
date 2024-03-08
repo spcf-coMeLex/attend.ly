@@ -55,8 +55,14 @@ const students = [
 const StudentList = ({ navigation, route }) => {
   const [isQrLoading, setIsQRLoading] = useState(false);
 
-  const { sectionCode, subjectCode } = route.params;
-  const qrValue = JSON.stringify({ sectionCode, subjectCode });
+  // const { sectionCode, subjectCode } = route.params;
+  const qrValue = JSON.stringify({
+    sectionCode: "CCIS5A",
+    subjectCode: "PLL",
+    departmentCode: "CCIS",
+    branchName: "BALIBAGO",
+    programCode: "BSCS",
+  });
 
   const qrCodeRef = useRef(null);
   const bottomSheetModalRef = useRef(null);
@@ -125,7 +131,7 @@ const StudentList = ({ navigation, route }) => {
         </View>
       </Card>
     ),
-    [],
+    []
   );
 
   const onShareQrCode = useCallback(() => {

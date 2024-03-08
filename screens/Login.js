@@ -2,16 +2,18 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { SafeAreaView, Text } from "react-native";
+import { ActivityIndicator, SafeAreaView, Text } from "react-native";
 import { Button, View } from "react-native-ui-lib";
 
 import globalStyles, { sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
 import useAuthStore from "../stores/useAuthStore";
+import useICPFetching from "../stores/useICPFetching";
 
 const Login = () => {
-  // const login = useAuthStore((state) => state.login);
-  const login = useAuthStore((state) => state.loginTest);
+  const isFetching = useICPFetching((state) => state.isFetching);
+  const login = useAuthStore((state) => state.login);
+  // const login = useAuthStore((state) => state.loginTest);
 
   return (
     <>
@@ -67,7 +69,7 @@ const Login = () => {
           </View>
 
           <Button
-            label="Login with Internet Identity"
+            label={isFetching ? " " : "Login with Internet Identity"}
             labelStyle={textStyles.subTitle}
             style={{
               marginHorizontal: sizes.xlarge,
@@ -75,7 +77,10 @@ const Login = () => {
             }}
             enableShadow
             onPress={login}
-          />
+            disabled={isFetching}
+          >
+            {isFetching && <ActivityIndicator />}
+          </Button>
         </View>
       </SafeAreaView>
     </>

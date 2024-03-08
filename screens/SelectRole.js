@@ -31,7 +31,7 @@ const SelectRole = ({ navigation }) => {
   const handleContinue = useCallback(() => {
     switch (selected) {
       case ROLES.STUDENT:
-        navigation.navigate(Routes.SCAN_CODE);
+        navigation.navigate(Routes.SCAN_CODE, { role: ROLES.STUDENT });
         // navigation.navigate(Routes.SIGN_UP, { role: ROLES.STUDENT });
         break;
       case ROLES.TEACHER:

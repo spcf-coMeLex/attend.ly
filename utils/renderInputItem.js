@@ -11,6 +11,8 @@ const renderInputItem = ({ key, item, data, setData, value }) => {
   // }
 
   if (item.isDate) {
+    const date = new Date((data && data[item.state]) || value);
+
     return (
       <DateTimePicker
         key={key}
@@ -20,6 +22,7 @@ const renderInputItem = ({ key, item, data, setData, value }) => {
             backgroundColor: Colors.$backgroundDefault,
           },
         }}
+        value={((data && data[item.state]) || value) && date}
         onChange={(text) => {
           if (!item.state) {
             setData(text);

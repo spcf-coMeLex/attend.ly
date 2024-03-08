@@ -10,7 +10,10 @@
     },
     "preview": {
       "distribution": "internal",
-      "channel": "preview"
+      "channel": "preview",
+      "env": {
+        "EXPO_PUBLIC_GEOCODING_API_KEY": "65e289c37d116555283074adyb61dfe"
+      }
     },
     "production": {
       "channel": "production"

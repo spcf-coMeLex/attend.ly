@@ -1,51 +1,102 @@
-type StatusType = 
+type Teacher = 
+ record {
+   address: text;
+   birthDate: text;
+   branchName: text;
+   departmentCode: text;
+   firstName: text;
+   gender: text;
+   id: text;
+   lastName: text;
+   middleName: opt text;
+ };
+type Student = 
+ record {
+   address: text;
+   birthDate: text;
+   branchName: text;
+   departmentCode: text;
+   firstName: text;
+   gender: text;
+   id: text;
+   lastName: text;
+   middleName: opt text;
+   parentsEmail: text;
+   points: float64;
+   programCode: text;
+   sectionCode: text;
+ };
+type Result_4 = 
  variant {
-   In;
-   Out;
+   err: MessageResult;
+   ok: MessageResult;
+ };
+type Result_3 = 
+ variant {
+   err: MessageResult;
+   ok: record {
+         id: text;
+         message: text;
+       };
  };
 type Result_2 = 
  variant {
-   err: text;
-   ok: Attendance;
+   err: MessageResult;
+   ok: record {
+         profile: Teacher;
+         role: text;
+       };
  };
 type Result_1 = 
  variant {
-   err: text;
-   ok: principal;
+   err: MessageResult;
+   ok: Student;
  };
 type Result = 
  variant {
-   err: text;
-   ok: text;
+   err: MessageResult;
+   ok: Teacher;
  };
-type Day = 
- variant {
-   Friday;
-   Monday;
-   Saturday;
-   Sunday;
-   Thursday;
-   Tuesday;
-   Wednesday;
+type MessageResult = record {message: text;};
+type CreateTeacherPayload = 
+ record {
+   address: text;
+   birthDate: text;
+   branchName: text;
+   departmentCode: text;
+   firstName: text;
+   gender: text;
+   id: opt text;
+   lastName: text;
+   middleName: opt text;
+ };
+type CreateStudentPayload = 
+ record {
+   address: text;
+   birthDate: text;
+   branchName: text;
+   departmentCode: text;
+   firstName: text;
+   gender: text;
+   id: opt text;
+   lastName: text;
+   middleName: opt text;
+   parentsEmail: text;
+   programCode: text;
+   sectionCode: text;
  };
 type Attendance = 
  record {
-   attendanceType: StatusType;
-   classId: text;
-   day: Day;
-   studentId: principal;
-   subjectId: text;
-   time: text;
+   hashed: text;
+   serialized: text;
+   studentId: text;
  };
 service : {
-  createAttendance: (text, Attendance) -> (Result);
-  employeesRegister: (text) -> (Result);
-  getAttendances: () -> (vec Attendance) query;
-  getEmployees: () -> (vec principal) query;
-  getStudents: () -> (vec principal) query;
-  showAttendance: (text) -> (Result_2) query;
-  showEmployee: (text) -> (Result_1) query;
-  showStudent: (text) -> (Result_1) query;
-  studentRegister: (text) -> (Result);
+  createAttendance: (Attendance) -> (Result_4);
+  createStudent: (CreateStudentPayload) -> (Result_3);
+  createTeacher: (CreateTeacherPayload) -> (Result_3);
+  getRoleAndProfile: () -> (Result_2);
+  getStudent: (principal) -> (Result_1);
+  getTeacher: (principal) -> (Result);
   whoami: () -> (principal);
 }

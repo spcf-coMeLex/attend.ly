@@ -6,6 +6,7 @@ const STATES = {
   BIRTHDAY: "birthDate",
   ADDRESS: "address",
   PARENTS_EMAIL: "parentsEmail",
+  SECTION: "sectionCode",
   PROGRAM: "programCode",
   BRANCH: "branchName",
   DEPARTMENT: "departmentCode",

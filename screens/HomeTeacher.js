@@ -26,6 +26,7 @@ import globalStyles, { colors, sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
 import chartConfig from "../consts/chartConfig";
 import Routes from "../navigation/Routes";
+import useProfileStore from "../stores/useProfileStore";
 import greetings from "../utils/greetings";
 
 const screenWidth = Dimensions.get("window").width;
@@ -63,6 +64,8 @@ const activities = [
 const HomeTeacher = ({ navigation }) => {
   const scrollViewRef = useRef(null);
 
+  const profile = useProfileStore((state) => state.profile);
+
   useScrollToTop(scrollViewRef);
 
   return (
@@ -92,7 +95,7 @@ const HomeTeacher = ({ navigation }) => {
               {greetings()},
             </Text>
             <Text style={[textStyles.heading, { color: "white" }]}>
-              Mel Mathew
+              {profile?.firstName}
             </Text>
           </View>
 

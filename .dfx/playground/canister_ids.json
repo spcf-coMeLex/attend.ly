@@ -1,8 +1,12 @@
 {
-  "attendly": {},
-  "attendly_landing": {
-    "playground": "xpjyl-daaaa-aaaab-qadcq-cai"
+  "attendly": {
+    "playground": "6cajv-qqaaa-aaaab-qactq-cai"
   },
-  "ii_integration": {},
-  "internet_identity": {}
+  "attendly_landing": {},
+  "ii_integration": {
+    "playground": "72j4w-6qaaa-aaaab-qacxq-cai"
+  },
+  "internet_identity": {
+    "playground": "5jw7w-wiaaa-aaaab-qacza-cai"
+  }
 }

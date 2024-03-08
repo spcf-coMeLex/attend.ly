@@ -22,6 +22,7 @@ import globalStyles, { colors, sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
 import useTime from "../hooks/useTime";
 import Routes from "../navigation/Routes";
+import useProfileStore from "../stores/useProfileStore";
 import getCoordinates from "../utils/getCoordinates";
 import greetings from "../utils/greetings";
 
@@ -52,27 +53,29 @@ const HomeStudent = ({ navigation }) => {
   const [schoolCoordinates, setSchoolCoordinates] = useState(null);
   const [isLoadingCoordinates, setIsLoadingCoordinates] = useState(true);
 
+  const profile = useProfileStore((state) => state.profile);
   const time = useTime();
 
   const scrollViewRef = useRef(null);
   const mapRef = useRef(null);
 
   useEffect(() => {
-    // Request for location permissions
-    Location.requestForegroundPermissionsAsync();
+    (async () => {
+      // Request for location permissions
+      await Location.requestForegroundPermissionsAsync();
 
-    // Get the coordinates of the school
-    getCoordinates(SCHOOL_NAME)
-      .then((coords) =>
+      // Get the coordinates of the school
+      try {
+        const coords = await getCoordinates(SCHOOL_NAME);
         setSchoolCoordinates({
           ...coords,
           latitudeDelta: LAT_DELTA,
           longitudeDelta: LON_DELTA,
-        }),
-      )
-      .finally(() => {
+        });
+      } finally {
         setIsLoadingCoordinates(false);
-      });
+      }
+    })();
   }, []);
 
   const onUserLocationPress = useCallback(() => {
@@ -90,7 +93,7 @@ const HomeStudent = ({ navigation }) => {
             latitudeDelta: LAT_DELTA,
             longitudeDelta: LON_DELTA,
           },
-          1000,
+          1000
         );
       })
       .finally(() => {
@@ -135,7 +138,7 @@ const HomeStudent = ({ navigation }) => {
               {greetings()},
             </Text>
             <Text style={[textStyles.heading, { color: "white" }]}>
-              Mel Mathew
+              {profile?.firstName}
             </Text>
           </View>
 

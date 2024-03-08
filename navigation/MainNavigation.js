@@ -18,17 +18,19 @@ import StudentList from "../screens/StudentList";
 import StudentProfile from "../screens/StudentProfile";
 import SubjectList from "../screens/SubjectList";
 import useAuthStore from "../stores/useAuthStore";
+import useProfileStore from "../stores/useProfileStore";
 
 const Stack = createNativeStackNavigator();
 
 const MainNavigation = () => {
-  const { identity, isRegistered, role } = useAuthStore(
+  const { identity, isRegistered } = useAuthStore(
     useShallow((state) => ({
       identity: state.identity,
       isRegistered: state.isRegistered,
-      role: state.role,
-    })),
+    }))
   );
+
+  const role = useProfileStore((state) => state.role);
 
   return (
     <Stack.Navigator
