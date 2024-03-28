@@ -13,6 +13,8 @@
 - EXPO_PUBLIC_GEOCODING_API_KEY
 - EXPO_PUBLIC_NGROK_URL
 
-# Installing DFX
+# Prerequisites
 
-- [ICP Guide on installing tools](https://internetcomputer.org/docs/current/developer-docs/getting-started/install/)
+- [Installing DFX](https://internetcomputer.org/docs/current/developer-docs/getting-started/install/)
+- [Installing Expo](https://docs.expo.dev/get-started/installation/)
+- [Installing Mops for Motoko](https://mops.one/docs/install)
