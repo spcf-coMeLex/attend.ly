@@ -2,7 +2,8 @@
 
 1. dfx start --clean
 2. dfx deploy
-3. npx expo start --clear
+3. dfx generate
+4. npx expo start --clear
 
 # Environment Variables
 
