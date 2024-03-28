@@ -18,4 +18,5 @@
 
 - [Installing DFX](https://internetcomputer.org/docs/current/developer-docs/getting-started/install/)
 - [Installing Expo](https://docs.expo.dev/get-started/installation/)
+- [Installing ngrok](https://ngrok.com/docs/getting-started/)
 - [Installing Mops for Motoko](https://mops.one/docs/install)
