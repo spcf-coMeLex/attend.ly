@@ -2,8 +2,9 @@
 
 1. dfx start --clean
 2. dfx deploy
-3. dfx generate
-4. npx expo start --clear
+3. dfx generate (copy canister ids to env)
+4. ngrok http 4943 (copy link to env)
+5. npx expo start --clear
 
 # Environment Variables
 
