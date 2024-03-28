@@ -44,7 +44,7 @@ const Rewards = () => {
         </View>
       </Card>
     ),
-    [],
+    []
   );
 
   return (

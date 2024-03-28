@@ -6,7 +6,7 @@ const getCoordinates = async (place) => {
   geoCodeUrl.searchParams.append("q", place);
   geoCodeUrl.searchParams.append(
     "api_key",
-    process.env.EXPO_PUBLIC_GEOCODING_API_KEY,
+    process.env.EXPO_PUBLIC_GEOCODING_API_KEY
   );
 
   const response = await fetch(geoCodeUrl);
