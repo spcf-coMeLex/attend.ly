@@ -20,3 +20,5 @@
 - [Installing Expo](https://docs.expo.dev/get-started/installation/)
 - [Installing ngrok](https://ngrok.com/docs/getting-started/)
 - [Installing Mops for Motoko](https://mops.one/docs/install)
+
+> Don't forget to visit the [landing page](mphur-2iaaa-aaaal-qdkbq-cai.icp0.io/)!
