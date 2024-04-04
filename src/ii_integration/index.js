@@ -27,7 +27,7 @@ async function main() {
           identityProvider:
             process.env.DFX_NETWORK === "ic"
               ? "https://identity.ic0.app"
-              : `https://c2bc-2405-8d40-440c-16e2-8115-a3b0-eb18-e5f9.ngrok-free.app/?canisterId=${iiCanisterId}`,
+              : `http://127.0.0.1:4943/?canisterId=${iiCanisterId}`,
           onSuccess: () => {
             const loginButton = document.querySelector("ii-login-button");
             const delegationIdentity = loginButton.identity;

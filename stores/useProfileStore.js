@@ -14,33 +14,33 @@ const useProfileStore = create((set) => ({
 
     const actor = getBackendActor(identity);
 
+    let result;
     try {
-      const { err, ok } = await actor.getRoleAndProfile();
-
-      if (err) {
-        console.log(err);
-        return false;
-      }
-
-      if (ok) {
-        const profile = Object.entries(ok.profile).reduce(
-          (acc, [key, value]) => {
-            if (Array.isArray(value)) {
-              acc[key] = "";
-            } else {
-              acc[key] = value;
-            }
-            return acc;
-          },
-          {}
-        );
-
-        set({ role: ok.role, profile });
-        console.log({ role: ok.role, profile: ok.profile });
-        return true;
-      }
+      result = await actor.getRoleAndProfile();
     } finally {
       useICPFetching.getState().setIsFetching(false);
+    }
+
+    const { err, ok } = result;
+
+    if (err) {
+      console.log(err);
+      return false;
+    }
+
+    if (ok) {
+      const profile = Object.entries(ok.profile).reduce((acc, [key, value]) => {
+        if (Array.isArray(value)) {
+          acc[key] = "";
+        } else {
+          acc[key] = value;
+        }
+        return acc;
+      }, {});
+
+      set({ role: ok.role, profile });
+      console.log({ role: ok.role, profile: ok.profile });
+      return true;
     }
   },
   clearProfile: async () => {

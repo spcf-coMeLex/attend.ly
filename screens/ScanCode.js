@@ -21,9 +21,7 @@ const ScanCode = ({ navigation, route }) => {
   const isFocused = useIsFocused();
   const storedRole = useProfileStore((state) => state.role);
 
-  const { role } = route.params;
-
-  const stackView = route.params?.stackView;
+  const { role, stackView } = route.params || {};
 
   useEffect(() => {
     requestPermission();
@@ -110,7 +108,7 @@ const ScanCode = ({ navigation, route }) => {
         }
       };
 
-      const selectedRole = role ?? selectedRole;
+      const selectedRole = role ?? storedRole;
 
       if (selectedRole === ROLES.TEACHER) {
         handleAttendance(data);

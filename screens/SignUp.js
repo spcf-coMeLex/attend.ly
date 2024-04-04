@@ -97,33 +97,32 @@ const RegisterTeacher = ({ navigation, route }) => {
   });
 
   const handleRegister = useCallback(async () => {
-    // if (!registerMutation.isPending) {
-    //   const actor = getActor();
+    if (!registerMutation.isPending) {
+      const actor = getActor();
 
-    //   let registrationData = formData;
+      let registrationData = formData;
 
-    //   // Add principalId to registration data
-    //   setIsFetching(true);
-    //   try {
-    //     const principal = await actor.whoami();
-    //     registrationData.principalId = principal.toText();
-    //   } catch (e) {
-    //     console.log(e);
-    //   } finally {
-    //     setIsFetching(false);
-    //   }
+      // Add principalId to registration data
+      setIsFetching(true);
+      try {
+        const principal = await actor.whoami();
+        registrationData.principalId = principal.toText();
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setIsFetching(false);
+      }
 
-    //   // Add qr value to registration data
-    //   if (role === ROLES.STUDENT) {
-    //     registrationData = {
-    //       ...registrationData,
-    //       ...qrValue,
-    //     };
-    //   }
+      // Add qr value to registration data
+      if (role === ROLES.STUDENT) {
+        registrationData = {
+          ...registrationData,
+          ...qrValue,
+        };
+      }
 
-    //   registerMutation.mutate(registrationData);
-    // }
-    setIsRegistered(true);
+      registerMutation.mutate(registrationData);
+    }
   }, [formData, identity, qrValue, registerMutation.isPending]);
 
   const renderItem = useCallback(
