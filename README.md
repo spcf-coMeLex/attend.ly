@@ -22,4 +22,9 @@
 - [Installing Mops for Motoko](https://mops.one/docs/install)
 - [Installing Expo](https://docs.expo.dev/get-started/installation/)
 
-> Don't forget to visit the [landing page](https://mphur-2iaaa-aaaal-qdkbq-cai.icp0.io/)
+# Programmers
+
+- Mel Mathew C. Palaña (Full-stack developer)
+- Alexander John Cammado (Backend developer)
+
+> Don't forget to visit this project's  [landing page](https://mphur-2iaaa-aaaal-qdkbq-cai.icp0.io/)
