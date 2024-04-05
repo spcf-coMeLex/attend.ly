@@ -7,7 +7,7 @@
 4. Open .env file and copy the canister ids to **EXPO_PUBLIC_CANISTER_ID_ATTENDLY**, **EXPO_PUBLIC_CANISTER_ID_INTERNET_IDENTITY**, and **EXPO_PUBLIC_CANISTER_ID_II_INTEGRATION**
 5. npx expo start --clear
 
-> This project has not been setup to work with physical devices. However, it will work fine when deployed on the ic. You can do some workarounds through the use of [Localtunnel](https://localtunnel.me/) and following how I did it on my [other project](https://github.com/spcf-coMeLex/wander.ly).
+> This project has not been setup to work with physical devices locally. However, it will work fine when deployed on the ic. If you want to make it work, you can do some workarounds through the use of [Localtunnel](https://localtunnel.me/) and following how I did it on my [other project](https://github.com/spcf-coMeLex/wander.ly).
 
 # Environment Variables
 
