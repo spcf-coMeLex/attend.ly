@@ -128,8 +128,7 @@ const useAuthStore = create((set, get) => ({
     //     process.env.EXPO_PUBLIC_CANISTER_ID_II_INTEGRATION
     // );
     const url = new URL(
-      process.env.EXPO_PUBLIC_NGROK_URL +
-        "/?canisterId=" +
+      "http://localhost:4943/?canisterId=" +
         process.env.EXPO_PUBLIC_CANISTER_ID_II_INTEGRATION
     );
 

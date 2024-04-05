@@ -6,6 +6,9 @@ export const QRCodeProvider = ({ children }) => {
   const [qrValue, setQrValue] = useState({
     sectionCode: "CCIS4A",
     subjectCode: "PROG1L",
+    departmentCode: "CCIS",
+    branchName: "BALIBAGO",
+    programCode: "BSCS",
   });
 
   return (

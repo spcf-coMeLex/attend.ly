@@ -1,7 +1,6 @@
 import ROLES from "./roles";
 import branchData from "./school/branches";
 import departmentData from "./school/departments";
-import sectionData from "./school/section";
 import STATES from "./states";
 
 const emptyDropdownValue = {
@@ -52,17 +51,17 @@ const FORM_FIELDS = [
     label: "Address",
     placeholder: "Enter your address",
   },
-  {
-    state: STATES.SECTION,
-    label: "Section",
-    placeholder: "Enter your section",
-    isDropdown: true,
-    dropdownData: [
-      { label: "Please select a section:", ...emptyDropdownValue },
-      ...sectionData,
-    ],
-    forRole: ROLES.STUDENT,
-  },
+  // {
+  //   state: STATES.SECTION,
+  //   label: "Section",
+  //   placeholder: "Enter your section",
+  //   isDropdown: true,
+  //   dropdownData: [
+  //     { label: "Please select a section:", ...emptyDropdownValue },
+  //     ...sectionData,
+  //   ],
+  //   forRole: ROLES.STUDENT,
+  // },
   // {
   //   state: STATES.PROGRAM,
   //   label: "Program",

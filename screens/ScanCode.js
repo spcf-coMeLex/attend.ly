@@ -11,6 +11,7 @@ import { Button } from "react-native-ui-lib";
 import globalStyles, { colors, sizes } from "../assets/styles/globalStyles";
 import textStyles from "../assets/styles/textStyles";
 import ROLES from "../consts/roles";
+import { useQRCodeContext } from "../contexts/QRCodeContext";
 import Routes from "../navigation/Routes";
 import useProfileStore from "../stores/useProfileStore";
 
@@ -18,13 +19,92 @@ const ScanCode = ({ navigation, route }) => {
   const [code, setCode] = useState("");
   const [torch, toggleTorch] = useReducer((state) => !state, false);
   const [permission, requestPermission] = useCameraPermissions();
-  const isFocused = useIsFocused();
   const storedRole = useProfileStore((state) => state.role);
+  const isFocused = useIsFocused();
+  const { setQrValue } = useQRCodeContext();
 
   const { role, stackView } = route.params || {};
 
   useEffect(() => {
     requestPermission();
+  }, []);
+
+  const handleAttendance = useCallback((data) => {
+    const { student, attendance, subject } = JSON.parse(data) || {};
+
+    if (student && attendance && subject) {
+      Alert.alert(
+        "Attendance",
+        `You are about to mark attendance for ${student} in ${subject}`,
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+            onPress: () => {
+              console.log("Cancel Pressed");
+
+              setCode("");
+            },
+          },
+          {
+            text: "OK",
+            onPress: () => {
+              Alert.alert(
+                `A notification has been sent to ${student}'s for ${attendance}`
+              );
+            },
+          },
+        ]
+      );
+    }
+  }, []);
+
+  const hanndleJoinClass = useCallback((data) => {
+    const {
+      sectionCode,
+      subjectCode,
+      departmentCode,
+      branchName,
+      programCode,
+    } = JSON.parse(data) || {};
+
+    if (
+      sectionCode &&
+      subjectCode &&
+      departmentCode &&
+      branchName &&
+      programCode
+    ) {
+      Alert.alert(
+        "Join Class",
+        `You are about to join ${sectionCode}'s class for ${subjectCode}`,
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+            onPress: () => {
+              console.log("Cancel Pressed");
+
+              setCode("");
+            },
+          },
+          {
+            text: "OK",
+            onPress: () => {
+              setQrValue({
+                sectionCode,
+                subjectCode,
+                departmentCode,
+                branchName,
+                programCode,
+              });
+
+              navigation.navigate(Routes.SIGN_UP, { role: ROLES.STUDENT });
+            },
+          },
+        ]
+      );
+    }
   }, []);
 
   const onQRScanned = useCallback(
@@ -33,80 +113,6 @@ const ScanCode = ({ navigation, route }) => {
       if (data === code) {
         return;
       }
-
-      const handleAttendance = (data) => {
-        const { student, attendance, subject } = JSON.parse(data) || {};
-
-        if (student && attendance && subject) {
-          Alert.alert(
-            "Attendance",
-            `You are about to mark attendance for ${student} in ${subject}`,
-            [
-              {
-                text: "Cancel",
-                style: "cancel",
-                onPress: () => {
-                  console.log("Cancel Pressed");
-
-                  setCode("");
-                },
-              },
-              {
-                text: "OK",
-                onPress: () => {
-                  Alert.alert(
-                    `A notification has been sent to ${student}'s for ${attendance}`
-                  );
-                },
-              },
-            ]
-          );
-        }
-      };
-
-      const hanndleJoinClass = (data) => {
-        const {
-          sectionCode,
-          subjectCode,
-          departmentCode,
-          branchName,
-          programCode,
-        } = JSON.parse(data) || {};
-
-        if (
-          sectionCode &&
-          subjectCode &&
-          departmentCode &&
-          branchName &&
-          programCode
-        ) {
-          Alert.alert(
-            "Join Class",
-            `You are about to join ${sectionCode}'s class for ${subjectCode}`,
-            [
-              {
-                text: "Cancel",
-                style: "cancel",
-                onPress: () => {
-                  console.log("Cancel Pressed");
-
-                  setCode("");
-                },
-              },
-              {
-                text: "OK",
-                onPress: () => {
-                  Alert.alert(
-                    `Joined ${sectionCode}'s class for ${subjectCode}`
-                  );
-
-                  navigation.navigate(Routes.SIGN_UP, { role: ROLES.STUDENT });
-                },
-              },
-            ]
-          );
-        }
-      };
 
       const selectedRole = role ?? storedRole;
 
@@ -204,7 +210,7 @@ const ScanCode = ({ navigation, route }) => {
                 marginVertical: sizes.medium,
               }}
               enableShadow
-              disabled={!code}
+              // disabled={!code}
               onPress={() =>
                 navigation.navigate(Routes.SIGN_UP, {
                   role: ROLES.STUDENT,

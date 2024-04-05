@@ -6,9 +6,7 @@ import { createActor } from "./declarations/attendly";
 const CANISTER_ID = process.env.EXPO_PUBLIC_CANISTER_ID_ATTENDLY;
 
 const NETWORK =
-  Platform.OS === "android"
-    ? "http://10.0.2.2:4943"
-    : process.env.EXPO_PUBLIC_NGROK_URL;
+  Platform.OS === "android" ? "http://10.0.2.2:4943" : "http://127.0.0.1:4943";
 
 const getBackendActor = (identity) => {
   return createActor(CANISTER_ID, {
