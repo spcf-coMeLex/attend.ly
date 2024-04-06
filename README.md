@@ -1,6 +1,9 @@
 # Landing Page
 
-> https://mphur-2iaaa-aaaal-qdkbq-cai.icp0.io/
+```
+https://mphur-2iaaa-aaaal-qdkbq-cai.icp0.io/
+```
+**Repository:** https://github.com/spcf-coMeLex/attend.ly-landing
 
 # How to run?
 
