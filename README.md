@@ -1,3 +1,7 @@
+# Landing Page
+
+> https://mphur-2iaaa-aaaal-qdkbq-cai.icp0.io/
+
 # How to run?
 
 1. npm install
@@ -26,5 +30,3 @@
 
 - Mel Mathew C. Palaña (Full-stack developer)
 - Alexander John Cammado (Backend developer)
-
-> Don't forget to visit this project's  [landing page](https://mphur-2iaaa-aaaal-qdkbq-cai.icp0.io/)
