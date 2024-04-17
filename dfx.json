@@ -20,7 +20,10 @@
     },
     "ii_integration": {
       "type": "assets",
-      "source": ["src/ii_integration/assets", "src/ii_integration/dist"]
+      "source": ["src/ii_integration/assets", "src/ii_integration/dist"],
+      "declarations": {
+        "node_compatibility": true
+      }
     }
   },
   "defaults": {
