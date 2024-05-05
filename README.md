@@ -8,6 +8,7 @@ https://mphur-2iaaa-aaaal-qdkbq-cai.icp0.io/
 # How to run?
 
 1. npm install
+2. cd src/ii_integration && npm install
 1. dfx start --clean
 2. dfx deploy
 3. dfx generate
