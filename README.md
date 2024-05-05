@@ -7,15 +7,15 @@ https://mphur-2iaaa-aaaal-qdkbq-cai.icp0.io/
 
 # How to run?
 
-1. npm install
-2. cd src/ii_integration && npm install
-1. dfx start --clean
-2. dfx deploy
-3. dfx generate
-4. Open .env file and copy the canister ids to **EXPO_PUBLIC_CANISTER_ID_ATTENDLY**, **EXPO_PUBLIC_CANISTER_ID_INTERNET_IDENTITY**, and **EXPO_PUBLIC_CANISTER_ID_II_INTEGRATION**
-5. npx expo start --clear
+1. `npm install`
+2. `cd src/ii_integration && npm install && cd ../..`
+3. `dfx start --clean`
+4. `dfx deploy`
+5. `dfx generate`
+6. Open .env file and copy the canister ids to `EXPO_PUBLIC_CANISTER_ID_ATTENDLY`, `EXPO_PUBLIC_CANISTER_ID_INTERNET_IDENTITY`, and `EXPO_PUBLIC_CANISTER_ID_II_INTEGRATION`.
+7. `npx expo start --clear`
 
-> This project has not been setup to work with physical devices locally. However, it will work fine when deployed on the ic. If you want to make it work locally, you can do some workarounds through the use of [Localtunnel](https://localtunnel.me/) and following how I did it on my [other project](https://github.com/spcf-coMeLex/wander.ly).
+> This project has not been setup to work with physical devices locally. However, it will work fine when deployed on the ic. If you want to make it work locally, you can do some workarounds through the use of [Localtunnel](https://localtunnel.me/) and following how I did it on my [other project](https://github.com/melmatx/wander.ly).
 
 # Environment Variables
 
