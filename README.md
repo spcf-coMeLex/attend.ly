@@ -1,6 +1,6 @@
 ### 🏆 IRCITE 2024: 2nd Runner Up
 
-✅ [Read the article](https://medium.com/@ICPHubPH/ircite-2024-celebrating-innovation-and-creativity-at-ithink-hackathon-award-ceremony-58734293686f)
+✅ [Read the article!](https://medium.com/@ICPHubPH/ircite-2024-celebrating-innovation-and-creativity-at-ithink-hackathon-award-ceremony-58734293686f)
 
 🎥 [Video Presentation](https://drive.google.com/file/d/1PHRe09-dPGpJSBdcTh9moOt1ynkTuv-z/view?usp=drive_link)
 
