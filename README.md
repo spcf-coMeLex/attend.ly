@@ -24,7 +24,7 @@ https://mphur-2iaaa-aaaal-qdkbq-cai.icp0.io/
 6. Open .env file and copy the canister ids to `EXPO_PUBLIC_CANISTER_ID_ATTENDLY`, `EXPO_PUBLIC_CANISTER_ID_INTERNET_IDENTITY`, and `EXPO_PUBLIC_CANISTER_ID_II_INTEGRATION`.
 7. `npx expo start --clear`
 
-> This project has not been setup to work with physical devices locally. However, it will work fine when deployed on the ic. If you want to make it work locally, you can do some workarounds through the use of [Localtunnel](https://localtunnel.me/) and following how I did it on my [other project](https://github.com/melmatx/wander.ly).
+> This project has not been setup to work with physical devices locally. However, it will work fine when deployed on the ic. If you want to make it work locally, you can do some workarounds through the use of [Localtunnel](https://localtunnel.me/) or [Ophiuchi](https://www.ophiuchi.dev/), and following how I did it on my [other project](https://github.com/melmatx/wander.ly).
 
 # Environment Variables
 
